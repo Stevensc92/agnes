@@ -1,0 +1,21 @@
+{
+    "name": "agnes/guide",
+    "type": "Project",
+    "description": "Guide touristique Sénégal",
+    "autoload": {
+        "psr-4": {
+            "Agnes\\": "src/"
+        }
+    },
+    "require": {
+        "php" : "7.*",
+        "altorouter/altorouter": "^1.2",
+        "twig/twig": "^2.4"
+    },
+    "authors": [
+        {
+            "name": "Natsuro",
+            "email": "natsuro@gmail.com"
+        }
+    ]
+}
