@@ -28,6 +28,9 @@
         <!-- Main Style -->
         <link href="{{ asset('css/main.css') }}" rel="stylesheet">
 
+        <!-- Additionnal style -->
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
         <!-- Supersized -->
         <link href="{{ asset('css/supersized.css') }}" rel="stylesheet">
         <link href="{{ asset('css/supersized.shutter.css') }}" rel="stylesheet">
@@ -90,7 +93,15 @@
         </div>
         <!-- End of Splash Screen -->
 
+        {% if flashMessage %}
+            <div id="flash" class="alert alert-{{ flashMessage.type }}">
+                <a class="close">x</a>
+                <p class="content">{{ flashMessage.content }}</p>
+            </div>
+        {% endif %}
+
         {% if slider == true %}
             {% include 'template/slider_top.html.twig' %}
         {% endif %}
+
         {% include 'template/menu.html.twig' %}
