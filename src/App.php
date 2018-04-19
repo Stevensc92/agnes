@@ -18,8 +18,18 @@ class App
 
         $this->router->setBasePath('agnes2/');
 
+        /**
+         * Primary routes
+         */
         $this->router->map('GET', '/', 'IndexController#index', 'index');
-        $this->router->map('GET|POST', '/login', 'UserController#login', 'login');
+
+
+        /**
+         * User routes
+         */
+        $this->router->map('POST',  '/login',   'UserController#login',     'login');
+        $this->router->map('POST',  '/signup',  'UserController#signUp',    'signUp');
+        $this->router->map('GET',   '/logout', 'UserController#logout',    'logout');
 
         DBConnection::setConfig(Config::getConfig());
     }
