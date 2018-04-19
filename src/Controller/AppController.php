@@ -74,8 +74,6 @@ class AppController
             ));
             unset($_SESSION['flashMessage']);
         }
-        // print_r($this);
-        // exit;
     }
 
     public function notFound(): void
