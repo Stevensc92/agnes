@@ -2,12 +2,15 @@
 
 namespace Agnes\Controller;
 
+use Agnes\Util\FlashMessage;
+
 class AppController
 {
     protected $twig;
     protected $router;
+    protected $session;
 
-    public function __construct($router)
+    public function __construct(\AltoRouter $router)
     {
         $this->router = $router;
 
@@ -51,6 +54,28 @@ class AppController
 
         $this->twig->addFunction($asset);
         $this->twig->addFunction($path);
+
+        @$this->session->flash = new FlashMessage();
+
+
+        if (isset($_SESSION['user']))
+        {
+            $this->twig->addGlobal('app', array(
+                'username'  => $_SESSION['user']['username'],
+                'role'      => $_SESSION['user']['role'],
+            ));
+        }
+
+        if (isset($_SESSION['flashMessage']))
+        {
+            $this->twig->addGlobal('flashMessage', array(
+                'content'   => $_SESSION['flashMessage']['message'],
+                'type'      => $_SESSION['flashMessage']['type'],
+            ));
+            unset($_SESSION['flashMessage']);
+        }
+        // print_r($this);
+        // exit;
     }
 
     public function notFound(): void
