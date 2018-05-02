@@ -5,6 +5,7 @@ namespace Agnes;
 use Agnes\Config\Config;
 use Agnes\Controller\AppController;
 use Agnes\Util\DBConnection;
+use Agnes\Util\Router;
 
 class App
 {
@@ -12,7 +13,7 @@ class App
 
     public function __construct()
     {
-        $this->router = new \AltoRouter();
+        $this->router = new Router();
 
         $basePath = str_replace("\src", "", str_replace($_SERVER['DOCUMENT_ROOT'], "", __DIR__));
 
@@ -29,7 +30,18 @@ class App
          */
         $this->router->map('POST',  '/login',   'UserController#login',     'login');
         $this->router->map('POST',  '/signup',  'UserController#signUp',    'signUp');
-        $this->router->map('GET',   '/logout', 'UserController#logout',    'logout');
+        $this->router->map('GET',   '/logout',  'UserController#logout',    'logout');
+
+        /**
+         * Back office routes
+         */
+        $this->router->map('GET', '/administration', 'BackOfficeController#index', 'backOfficeIndex');
+
+            /**
+             * Picture routes
+             */
+             $this->router->map('GET', '/picture/add', 'BackOfficeController#addPicture', 'addPicture');
+             $this->router->map('POST', '/picture/upload', 'BackOfficeController#uploadPicture', 'uploadPicture');
 
         DBConnection::setConfig(Config::getConfig());
     }
