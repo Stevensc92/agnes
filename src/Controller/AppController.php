@@ -37,8 +37,8 @@ class AppController
          * @return string
          */
 
-        $asset = new \Twig_Function('asset', function($param): string {
-            $publicDir = 'public/';
+        $asset = new \Twig_Function('asset', function(string $param): string {
+            $publicDir = '/agnes2/public/';
             return $publicDir.$param;
         });
 
@@ -48,12 +48,25 @@ class AppController
          * @param string routeName
          * @return string path
          */
-        $path = new \Twig_Function('path', function($routeName, $params = array()): string{
-            return str_replace('agnes2/', '.', $this->router->generate($routeName, $params));
+        $path = new \Twig_Function('path', function(string $routeName, $params = array()): string{
+            return str_replace('agnes2/', '/agnes2', $this->router->generate($routeName, $params));
+        });
+
+        /**
+         * Create a TWIG function
+         * Return bool if user can access to a route
+         * @param string role [role to match with the user role]
+         * @return boolean
+         */
+        $is_granted = new \Twig_Function('is_granted', function(string $role){
+            if ($role === $_SESSION['user']['role'])
+                return true;
+            return false;
         });
 
         $this->twig->addFunction($asset);
         $this->twig->addFunction($path);
+        $this->twig->addFunction($is_granted);
 
         @$this->session->flash = new FlashMessage();
 
