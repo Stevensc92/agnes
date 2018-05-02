@@ -24,11 +24,12 @@ class UserController extends AppController
             if ($user)
             {
                 $passwordIsValid = password_verify($password, $user->getPassword());
-                if ($passwordIsValid && $user->getIsActive() === 1)
+                if ($passwordIsValid && $user->getIsActive() == 1)
                 {
                     $_SESSION['user']['username']   = $user->getUsername();
                     $_SESSION['user']['isActive']   = $user->getIsActive();
                     $_SESSION['user']['role']       = $user->getRole();
+
 
                     $flash['content']   = 'Connexion réussie';
                     $flash['type']      = 'success';
@@ -73,6 +74,8 @@ class UserController extends AppController
              $user->setUsername($username);
              $user->setPassword($hash);
              $user->setEmail($email);
+             $user->setIsActive(1);
+             $user->setRole('ROLE_USER');
 
              if ($user->add())
              {
@@ -106,6 +109,7 @@ class UserController extends AppController
          if (isset($_SESSION['user']))
          {
              unset($_SESSION['user']);
+             session_destroy();
              $this->session->flash->setFlashMessage('Déconnexion réussie', 'success');
 
              $this->router->redirect('./');
