@@ -15,7 +15,7 @@ class UserModel extends AppModel
 
     public function __construct()
     {
-        $this->setIsActive(1)->setRole('ROLE_USER');
+        // $this->setIsActive(0)->setRole('ROLE_USER');
     }
 
     /**
@@ -35,7 +35,7 @@ class UserModel extends AppModel
      *
      * @return self
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
 
@@ -59,7 +59,7 @@ class UserModel extends AppModel
      *
      * @return self
      */
-    public function setUsername($username)
+    public function setUsername(string $username)
     {
         $this->username = $username;
 
@@ -83,7 +83,7 @@ class UserModel extends AppModel
      *
      * @return self
      */
-    public function setPassword($password)
+    public function setPassword(string $password)
     {
         $this->password = $password;
 
@@ -107,7 +107,7 @@ class UserModel extends AppModel
      *
      * @return self
      */
-    public function setEmail($email)
+    public function setEmail(string $email)
     {
         $this->email = $email;
 
@@ -131,7 +131,7 @@ class UserModel extends AppModel
      *
      * @return self
      */
-    public function setIsActive($isActive)
+    public function setIsActive(int $isActive)
     {
         $this->isActive = $isActive;
 
@@ -155,7 +155,7 @@ class UserModel extends AppModel
      *
      * @return self
      */
-    public function setRole($role)
+    public function setRole(string $role)
     {
         $this->role = $role;
 
