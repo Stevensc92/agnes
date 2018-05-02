@@ -11,7 +11,7 @@
         "php" : "7.*",
         "altorouter/altorouter": "^1.2",
         "twig/twig": "^2.4",
-        "craigh/file-uploader": "^1.0",
+        "craigh/file-uploader": "^1.0"
     },
     "authors": [
         {
