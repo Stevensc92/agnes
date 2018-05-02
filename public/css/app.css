@@ -2,7 +2,7 @@
    Modal Style
 ================================================== */
 
-.class h3
+.modal-header h3
 {
     color: #000;
 }
@@ -14,6 +14,9 @@
 #flash
 {
     text-align: center;
+    position: fixed;
+    z-index: 999;
+    width: 100%
 }
 
 #flash p.content
@@ -24,4 +27,14 @@
 .alert
 {
     margin-bottom: 0px !important;
+}
+
+/* ==================================================
+   Form Style
+================================================== */
+
+#contact-form .submit,
+#upload-form .submit
+{
+    border-style: none;
 }
