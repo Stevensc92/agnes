@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% set slider = true %}
+
+{% block body %}
+<div id="focus" class="page">
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div class="title-page">
+                    <h2 class="title">Gallerie</h2>
+                    <h3 class="title-description">Liste des photos uploadées</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            {% if pictures is not empty %}
+                <div id="listPicture">
+                    {% for picture in pictures %}
+                        {% if picture.width > picture.height %}
+                            {% set class = 'landscape' %} {% set span = 'span6' %}
+                        {% else %}
+                            {% set class = 'portrait' %} {% set span = 'span3' %}
+                        {% endif %}
+
+                        {% if picture.description is empty %}
+                            {% set description = 'Aucune description' %}
+                        {% else %}
+                            {% set description = picture.description %}
+                        {% endif %}
+
+
+                        <div class="span12 picture" data-id="{{ picture.id }}">
+                            <div class="row">
+                                <img class="span3 img-responsive {{ class }}" src="{{ asset('uploads/') ~ picture.filename ~ picture.extension }}" alt="{{ picture.description }}" />
+                                <span class="span3" data-type="text" data-name="filename" data-default="{{ picture.filename }}">{{ picture.filename }}</span>
+                                <span class="span3" data-type="textarea" data-name="description" data-default="{{ description }}">{{ description }}</span>
+                                <span class="span3 hidden">fd
+                                    <i class="fa fa-check"></i>
+                                    <i class="fa fa-undo"></i>
+                                    <i class="far fa-trash-alt"></i>
+                                </span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Aucune photo uploadé</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

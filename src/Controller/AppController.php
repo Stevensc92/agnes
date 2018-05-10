@@ -3,6 +3,7 @@
 namespace Agnes\Controller;
 
 use Agnes\Util\FlashMessage;
+use Agnes\Util\File;
 
 class AppController
 {
@@ -64,9 +65,31 @@ class AppController
             return false;
         });
 
+        /**
+         * Create a twig function
+         * Dump a var passed to twig
+         * @param array|string var
+         * @return void
+         */
+        $dump = new \Twig_Function('dump', function(...$var) {
+            return var_dump($var);
+        });
+
+        $getExtension = new \Twig_Function('getExtension', function(string $filename) {
+            return '.'.File::getExtension($filename);
+        });
+
+        $str_replace = new \Twig_Function('str_replace', function($search, $replace, $subject) {
+            $data = str_replace($search, $replace, $subject);
+            return $data;
+        });
+
         $this->twig->addFunction($asset);
         $this->twig->addFunction($path);
         $this->twig->addFunction($is_granted);
+        $this->twig->addFunction($dump);
+        $this->twig->addFunction($getExtension);
+        $this->twig->addFunction($str_replace);
 
         @$this->session->flash = new FlashMessage();
 
@@ -92,5 +115,24 @@ class AppController
     public function notFound(): void
     {
         echo $this->twig->render('error/404.html.twig');
+    }
+
+    public function is_granted(string $role): bool
+    {
+        if (isset($_SESSION['user']) && isset($_SESSION['user']['role']))
+        {
+            if ($role === 'IS_AUTHENTICATED_FULLY')
+                return true;
+            else if ($role === $_SESSION['user']['role'])
+                return true;
+        }
+        return false;
+    }
+
+    public function is_ajax()
+    {
+        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
+            return true;
+        return false;
     }
 }

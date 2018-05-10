@@ -77,10 +77,10 @@ BRUSHED.slider = function(){
 		thumb_links				:	0,			// Individual thumb links for each slide
 		thumbnail_navigation    :   0,			// Thumbnail navigation
 		slides 					:  	[			// Slideshow Images
-											{image : './public/img/slider-images/Somone.jpg', title : '', thumb : '', url : ''},
-											{image : './public/img/slider-images/nature.jpg', title : '', thumb : '', url : ''},
-											{image : './public/img/slider-images/St-Louis.jpg', title : '', thumb : '', url : ''},
-											{image : './public/img/slider-images/bandia.jpg', title : '', thumb : '', url : ''}
+											{image : '/agnes2/public/img/slider-images/Somone.jpg', title : '', thumb : '', url : ''},
+											{image : '/agnes2/public/img/slider-images/nature.jpg', title : '', thumb : '', url : ''},
+											{image : '/agnes2/public/img/slider-images/St-Louis.jpg', title : '', thumb : '', url : ''},
+											{image : '/agnes2/public/img/slider-images/bandia.jpg', title : '', thumb : '', url : ''}
 									],
 
 		// Theme Options

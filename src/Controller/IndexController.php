@@ -2,6 +2,9 @@
 
 namespace Agnes\Controller;
 
+use Agnes\Model\CategoryModel;
+use Agnes\Model\PictureModel;
+
 class IndexController extends AppController
 {
     /**
@@ -9,7 +12,12 @@ class IndexController extends AppController
      */
     public function index(): void
     {
-        echo $this->twig->render('index/index.html.twig', array('name' => 'Stevens'));
+        $pictures = new PictureModel;
+
+        echo $this->twig->render('index/index.html.twig', [
+            'categories'    => CategoryModel::findAll(),
+            'pictures'      => PictureModel::findAllWithCategory(),
+        ]);
     }
 
 

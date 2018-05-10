@@ -6,7 +6,7 @@ use Agnes\Util\TableName;
 
 class AppModel
 {
-    public static function findAll(): array
+    public static function findAll()
     {
         $db = DBConnection::getInstance();
         $table = TableName::getTableName(get_called_class());
