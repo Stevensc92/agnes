@@ -42,13 +42,13 @@ class App
              */
              $this->router->map('GET', '/admin/picture/add', 'BackOfficeController#addPicture', 'addPicture');
              $this->router->map('POST', '/admin/picture/upload', 'BackOfficeController#uploadPicture', 'uploadPicture');
-             $this->router->map('GET', '/admin/picture/delete', 'BackOfficeController#deletePicture', 'deletePicture');
              $this->router->map('GET', '/admin/picture', 'BackOfficeController#listPicture', 'listPicture');
 
-        /**
-         * Ajax routes
-         */
-        $this->router->map('POST', '/admin/picture/update', 'BackOfficeController#updatePicture', 'updatePicture');
+            /**
+             * Ajax routes
+             */
+            $this->router->map('POST', '/admin/picture/update', 'BackOfficeController#updatePicture', 'updatePicture');
+            $this->router->map('POST', '/admin/picture/delete', 'BackOfficeController#deletePicture', 'deletePicture');
 
         DBConnection::setConfig(Config::getConfig());
     }

@@ -138,18 +138,6 @@ class BackOfficeController extends AppController
     }
 
     /**
-     * @Route("/admin/picture/delete", name="deletePicture")
-     * @Method("GET")
-     */
-    public function deletePicture()
-    {
-        if (!$this->is_granted('ROLE_ADMIN'))
-            $this->notFound();
-
-        echo $this->twig->render('picture/delete.html.twig');
-    }
-
-    /**
      * @Route("/admin/picture", name="listPicture")
      * @Method("GET")
      */
@@ -185,14 +173,8 @@ class BackOfficeController extends AppController
      */
     public function updatePicture()
     {
-        // if (!is_granted('ROLE_ADMIN'))
-        // {
-        //     $this->notFount();
-        //     return false;
-        // }
-        if ($this->is_ajax())
+        if (is_ajax())
         {
-
             $data = [];
             $id = $_POST['id'];
 
@@ -247,6 +229,27 @@ class BackOfficeController extends AppController
             }
 
             echo json_encode($data);
+        }
+    }
+
+    /**
+     * @Route("/admin/picture/delete", name="deletePicture")
+     * @Method("POST")
+     */
+    public function deletePicture()
+    {
+        if (is_ajax())
+        {
+            $response = [];
+            $id = $_POST['id'];
+            $picture = PictureModel::findById($id);
+
+            if (PictureModel::deleteById($id) && unlink('../agnes2/public/uploads/'.$picture->getFilename().$picture->getExtension()))
+                $response = array('success' => 'success');
+            else
+                $response = array('fail' => 'fail');
+
+            echo json_encode($response);
         }
     }
 }

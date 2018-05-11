@@ -51,10 +51,9 @@ jQuery(function($){
             }
         },
 		transformDiv : function() {
-            if ($("body").find("#listPicture"))
-                return true;
-            else
+            if ($("body").find("#listPicture").length == 0)
                 return false;
+
 			var listPicture = $('#listPicture');
 
 			if (listPicture.length > 0) {
@@ -96,10 +95,34 @@ jQuery(function($){
 
 				$('.fa-trash-alt').on('click', function() {
 					var $id = $(this).parent().parent().parent().attr('data-id');
+                    var div = $("div").find(`[data-id="${$id}"]`);
 
-					// $.post(
-					// 	'/agnes2/'
-					// );
+                    $.post(
+						"/agnes2/admin/picture/delete",
+                        {
+                            id: $id,
+                        },
+                        function(response) {
+                            if (typeof response.success !== 'undefined')
+                            {
+                                div.html('Photo supprimé');
+                            }
+                            else
+                            {
+                                if (div.hasClass('apply.shake'))
+                                    div.removeclass('apply-shake').css({
+                                        "backround-color" : "inherit",
+                                        "color" : "inherit"
+                                    });
+
+                                div.css({
+                                    'background-color' : '#fd4747',
+                                    'color' : 'white'
+                                }).addClass('apply-shake');
+                            }
+                        },
+                        "json"
+					);
 				});
 
                 $('.fa-undo').on('click', function() {
@@ -171,7 +194,7 @@ jQuery(function($){
                                 id: $id,
                             },
                             function(response) {
-                                if (typeof response.fail === 'undefined')
+                                if (typeof response.fail !== 'undefined')
                                 {
                                     console.log('echec');
                                     var div = $("div").find(`[data-id="${response.id}"]`);
@@ -223,7 +246,8 @@ jQuery(function($){
                                     }
 
                                     div.css({
-                                        'background-color' : 'green'
+                                        'background-color' : 'green',
+                                        'color' : 'white'
                                     });
                                 }
                             },

@@ -58,7 +58,7 @@ class AppModel
         return false;
     }
 
-    public function deleteById($id)
+    public static function deleteById($id)
     {
         $db = DBConnection::getInstance();
         $table = TableName::getTableName(get_called_class());
@@ -67,7 +67,7 @@ class AppModel
         $query = $db->prepare($stmt);
         $query->bindValue(':id', $id, \PDO::PARAM_INT);
 
-        if ($query->execute())
+        if ($query->execute() > 0)
             return true;
 
         return false;
