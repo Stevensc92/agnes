@@ -187,24 +187,27 @@ BRUSHED.fancyBox = function(){
    Contact Form
 ================================================== */
 
-BRUSHED.uploadForm = function(){
-	$("#contact-form").on('submit', function(event) {
-        event.preventDefault();
+BRUSHED.contactForm = function(){
+	$("#contact-submit").on('click',function() {
+        console.log('click');
+		$contact_form = $('#contact-form');
 
-		var files = $('#files')[0].files;
-		var formData = {
-			files: files,
-            category_id: $('#category').val()
-		};
+		var fields = $contact_form.serialize();
 
-		// console.log($('#category').val());
 		$.ajax({
 			type: "POST",
-			url: "/agnes2/src/Ajax/UploadForm.php",
-			data: formData,
-			dataType: 'json'
-		}).done(function(response) {
-			alert('done');
+			url: "./src/Ajax/Contact.php",
+			data: fields,
+			dataType: 'json',
+			success: function(response) {
+                console.log(response);
+				if(response.status){
+					$('#contact-form input').val('');
+					$('#contact-form textarea').val('');
+				}
+
+				$('#response').empty().html(response.html);
+			}
 		});
 		return false;
 	});
@@ -420,7 +423,7 @@ $(document).ready(function(){
 	BRUSHED.goUp();
 	BRUSHED.filter();
 	BRUSHED.fancyBox();
-	// BRUSHED.uploadForm();
+	BRUSHED.contactForm();
 	// BRUSHED.tweetFeed();
 	BRUSHED.scrollToTop();
 	BRUSHED.utils();

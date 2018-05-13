@@ -20,5 +20,8 @@ class IndexController extends AppController
         ]);
     }
 
-
+    public function contact(): void
+    {
+        echo $this->twig->render('index/contact.html.twig');
+    }
 }

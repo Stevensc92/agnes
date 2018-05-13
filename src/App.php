@@ -23,6 +23,7 @@ class App
          * Primary routes
          */
         $this->router->map('GET', '/', 'IndexController#index', 'index');
+        $this->router->map('GET', '/contact', 'IndexController#contact', 'contact');
 
 
         /**
@@ -44,11 +45,11 @@ class App
              $this->router->map('POST', '/admin/picture/upload', 'BackOfficeController#uploadPicture', 'uploadPicture');
              $this->router->map('GET', '/admin/picture', 'BackOfficeController#listPicture', 'listPicture');
 
-            /**
-             * Ajax routes
-             */
-            $this->router->map('POST', '/admin/picture/update', 'BackOfficeController#updatePicture', 'updatePicture');
-            $this->router->map('POST', '/admin/picture/delete', 'BackOfficeController#deletePicture', 'deletePicture');
+        /**
+         * Ajax routes
+         */
+        $this->router->map('POST', '/admin/picture/update', 'BackOfficeController#updatePicture', 'updatePicture');
+        $this->router->map('POST', '/admin/picture/delete', 'BackOfficeController#deletePicture', 'deletePicture');
 
         DBConnection::setConfig(Config::getConfig());
     }
