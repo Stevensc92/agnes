@@ -43,4 +43,22 @@ class CategoryModel extends AppModel
         return $this;
     }
 
+    public static function findOneByName(string $name)
+    {
+        $db = DBConnection::getInstance();
+
+        $stmt = "SELECT
+                    c.id,
+                    c.name
+                FROM
+                    category c
+                WHERE
+                    c.name = :name";
+        $query = $db->prepare($stmt);
+        $query->bindValue(':name', $name, \PDO::PARAM_STR);
+
+        if ($query->execute())
+            return $data = $query->fetchObject(static::class);
+    }
+
 }

@@ -4,6 +4,7 @@ namespace Agnes\Controller;
 
 use Agnes\Util\FlashMessage;
 use Agnes\Util\File;
+use Agnes\Util\Slugify;
 
 class AppController
 {
@@ -49,8 +50,23 @@ class AppController
          * @param string routeName
          * @return string path
          */
-        $path = new \Twig_Function('path', function(string $routeName, $params = array()): string{
-            return str_replace('agnes2/', '/agnes2', $this->router->generate($routeName, $params));
+        $path = new \Twig_Function('path', function(string $routeName, ...$params){
+            $url = $this->router->generate($routeName);
+
+            if (isset($params)) {
+                foreach ($params as $param) {
+                    // print_r($url);
+                    preg_match('/\[([a-z]+):([a-z]+)\]/', $url, $urlParam);
+                    $url = str_replace($urlParam[0], $param[$urlParam[2]], $url);
+                    $url = str_replace('agnes2/', '/agnes2', $url);
+                }
+            }
+            else
+                $url = str_replace('agnes2/', '/agnes2', $this->router->generate($routeName, $params));
+
+            return $url;
+            // var_dump($url);
+            // $url = preg_replace('#([a-z]{1}:[a-z]{1,})#', $params)
         });
 
         /**
@@ -67,12 +83,26 @@ class AppController
 
         /**
          * Create a twig function
-         * Dump a var passed to twig
+         * Dump a var passed from twig
          * @param array|string var
          * @return void
          */
         $dump = new \Twig_Function('dump', function(...$var) {
             return var_dump($var);
+        });
+
+        /**
+         * Create a twig function
+         * Slug a var passed from twig
+         * @param array|string var
+         * @return void
+         */
+        $slugify = new \Twig_Function('slugify', function(string $data) {
+            return Slugify::slug($data);
+        });
+
+        $displayVar = new \Twig_Function('displayVar', function(string $data) {
+            return htmlentities($data);
         });
 
         $getExtension = new \Twig_Function('getExtension', function(string $filename) {
@@ -88,6 +118,8 @@ class AppController
         $this->twig->addFunction($path);
         $this->twig->addFunction($is_granted);
         $this->twig->addFunction($dump);
+        $this->twig->addFunction($slugify);
+        $this->twig->addFunction($displayVar);
         $this->twig->addFunction($getExtension);
         $this->twig->addFunction($str_replace);
 

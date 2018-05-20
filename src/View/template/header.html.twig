@@ -83,13 +83,13 @@
 
         </script> -->
         <!-- End Analytics -->
-        <noscript>
+        <!-- <noscript>
             <p style="color:white;font-size:25px;">
                 Ce site nécessite l'activation de JavaScript,
                 nous vous prions d'activer Javascript pour permettre une meilleure
                 navigation.
             </p>
-        </noscript>
+        </noscript> -->
     </head>
 
     <body>
@@ -103,7 +103,7 @@
         <!-- End of Splash Screen -->
 
         {% if flashMessage %}
-            <div class="alert alert-{{ flashMessage.type }} fade in">
+            <div id="flash" class="alert alert-{{ flashMessage.type }} fade in">
                 <a class="close" data-dismiss="alert" href="#">&times;</a>
                 <p class="content">{{ flashMessage.content }}</p>
             </div>

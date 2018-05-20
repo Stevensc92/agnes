@@ -164,8 +164,10 @@ BRUSHED.fancyBox = function(){
 		$(".fancybox").fancybox({
 				padding : 0,
 				beforeShow: function () {
+					var $id = $(this.element).attr('data-id');
+
 					this.title = $(this.element).attr('title');
-					this.title = '<h4>' + this.title + '</h4>' + '<p>' + $(this.element).parent().find('img').attr('alt') + '</p>';
+					this.title = '<p>' + $(this.element).parent().find('img').attr('alt') + '</p> <a href="/agnes2/picture/'+$id+'">' + this.title + '</a>';
 				},
 				helpers : {
 					title : { type: 'inside' },

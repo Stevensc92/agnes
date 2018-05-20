@@ -104,6 +104,19 @@
     max-height: 400px;
 } */
 
+.show-image
+{
+    text-align: center;
+}
+
+/* ==================================================
+  Pagination Style
+================================================== */
+.page.active
+{
+    background-color: #DE5E60;
+    color: #FFF;
+}
 
 
 

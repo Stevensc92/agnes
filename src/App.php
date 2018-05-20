@@ -41,15 +41,18 @@ class App
             /**
              * Picture routes
              */
-             $this->router->map('GET', '/admin/picture/add', 'BackOfficeController#addPicture', 'addPicture');
-             $this->router->map('POST', '/admin/picture/upload', 'BackOfficeController#uploadPicture', 'uploadPicture');
-             $this->router->map('GET', '/admin/picture', 'BackOfficeController#listPicture', 'listPicture');
+             $this->router->map('GET',  '/picture/[i:id]',          'PictureController#showPicture',        'showPicture');
+             $this->router->map('GET',  '/picture/[a:category]',    'PictureController#showCategory',       'showCategory');
+             $this->router->map('GET',  '/admin/picture/add',       'BackOfficeController#addPicture',      'addPicture');
+             $this->router->map('POST', '/admin/picture/upload',    'BackOfficeController#uploadPicture',   'uploadPicture');
+             $this->router->map('GET',  '/admin/picture',           'BackOfficeController#listPicture',     'listPicture');
 
         /**
          * Ajax routes
          */
-        $this->router->map('POST', '/admin/picture/update', 'BackOfficeController#updatePicture', 'updatePicture');
-        $this->router->map('POST', '/admin/picture/delete', 'BackOfficeController#deletePicture', 'deletePicture');
+        $this->router->map('POST', '/admin/picture/update', 'BackOfficeController#updatePicture',   'updatePicture');
+        $this->router->map('POST', '/admin/picture/delete', 'BackOfficeController#deletePicture',   'deletePicture');
+        $this->router->map('POST', '/ajax/getcomment',      'AjaxController#getComment',               'getComment');
 
         DBConnection::setConfig(Config::getConfig());
     }

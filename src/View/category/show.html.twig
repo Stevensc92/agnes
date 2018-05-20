@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% set slider = true %}
+
+{% block body %}
+<div id="focus" class="page">
+    <div class="container">
+        <div class="row">
+            <div class="span3">
+            </div>
+
+            <div class="span9">
+                <div class="row">
+                <section id="projects">
+                    <ul id="thumbs">
+                        {% for picture in pictures %}
+                            <!-- Item Project and filter name -->
+                            <li class="item-thumbs span3 {{ picture.category_name }}">
+                                <!-- Fancybox - Gallery Enabled - Title - Full Image -->
+                                <a  class="hover-wrap fancybox"
+                                    data-fancybox-group="{{ picture.category_name }}"
+                                    title="Laisser un commentaire"
+                                    data-id="{{ picture.id }}"
+                                    href="{{ asset('uploads/') ~ picture.filename ~ picture.extension  }}">
+                                    <span class="overlay-img"></span>
+                                    <span class="overlay-img-thumb font-icon-plus"></span>
+                                </a>
+                                <!-- Thumb Image and Description -->
+                                <img src="{{ asset('uploads/') ~ picture.filename ~ picture.extension }}" alt="{{ picture.description }}">
+                            </li>
+                            <!-- End Item Project -->
+                        {% endfor %}
+                    </ul>
+                </section>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

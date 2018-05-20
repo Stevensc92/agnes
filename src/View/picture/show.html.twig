@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% set slider = true %}
+
+{% block body %}
+
+<div id="focus" class="page">
+    <div class="container">
+        <div class="row">
+            <div class="span6">
+                <h1>Catégorie</h1>
+                <a href="{{ path('showCategory', {'category': slugify(picture.category_name)}) }}">{{ picture.category_name }}</a>
+                <h1>Commentaire</h1>
+                {% if comments is not empty %}
+                    <div class="comment-list">
+                    {% for comment in comments %}
+                        <div class="comment">
+                            <blockquote>
+                                <small>Par {{ comment.username }} Le {{ comment.createdAt }}</small>
+                                <p>
+                                    {{ displayVar(comment.content) }}
+                                </p>
+                            </blockquote>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                <p>Aucun commentaire</p>
+                {% endif %}
+                <div id="pagination"></div>
+                {# {{ nb_comment }} #}
+            </div>
+            <div class="span6">
+                <div class="show-image">
+                    <img src="{{ asset('uploads/' ~ picture.filename ~ picture.extension )}}" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+jQuery(function($){
+    function escapeHtml(unsafe) {
+        return unsafe
+             .replace(/&/g, "&amp;")
+             .replace(/</g, "&lt;")
+             .replace(/>/g, "&gt;")
+             .replace(/"/g, "&quot;")
+             .replace(/'/g, "&#039;");
+    }
+
+    var nbComment = {{ nb_comment }};
+    var idPicture = {{ picture.id }}
+    var commentPerPage = 5;
+
+    var $commentDiv = $('.comment-list');
+
+    var nbPage = Math.ceil(nbComment / commentPerPage);
+    // console.log(nbComment);
+    // console.log(nbPage);
+    if (nbPage > 1) {
+        var currentPage = 1;
+        var pagination = $('#pagination');
+        var html = '';
+
+        for (var i = 1; i <= nbPage; i++) {
+            if (i == currentPage) {
+                html += '<button class="button button-mini page active">'+i+'</button>';
+            } else {
+                html += '<button class="button button-mini page">'+i+'</button>';
+            }
+        }
+
+        pagination.html(html)
+
+        $('.button.page').on('click', function() {
+            if ($(this).hasClass('active')) {
+                return false;
+            }
+
+            currentPage = $(this).html();
+            var page;
+            // if (currentPage > 1) {
+            //     page = currentPage;
+            // } else {
+            //     page = 0;
+            // }
+
+            var first_com = ((currentPage - 1) * commentPerPage);
+
+            $.post(
+                '/agnes2/ajax/getcomment',
+                {
+                    id_picture: idPicture,
+                    commentPerPage: commentPerPage,
+                    first_com: first_com
+                },
+                function(data) {
+                    var commentHtml = '';
+
+                    for (var i = 0; i < data.length; i++) {
+                        var com_username = data[i].com_username;
+                        var com_createdAt = data[i].com_createdAt;
+                        var com_content = escapeHtml(data[i].com_content);
+
+                        commentHtml += '<div class="comment">'+
+                                            '<blockquote>'+
+                                                '<small>Par '+com_username+' Le '+com_createdAt+'</small>'+
+                                                '<p>'+com_content+'</p>'+
+                                            '</blockquote>'+
+                                        '</div>';
+
+                        console.log(commentHtml);
+                    }
+
+                    $commentDiv.animate({
+                        'opacity': 0
+                    }, 500, function() {
+                        $commentDiv.html(commentHtml).animate({
+                            'opacity': 1
+                        });
+                    });
+                },
+                'json'
+            );
+            // console.log('click', $(this).html());
+            $(this).parent().find('.active').removeClass('active');
+        });
+
+    }
+    // console.log(nbPage);
+});
+</script>
+{% endblock %}

@@ -49,7 +49,9 @@
                                 <li class="item-thumbs span3 {{ picture.category_name }}">
                                     <!-- Fancybox - Gallery Enabled - Title - Full Image -->
                                     <a  class="hover-wrap fancybox"
-                                        data-fancybox-group="{{ picture.category_name }}" title="{{ picture.file }}"
+                                        data-fancybox-group="{{ picture.category_name }}"
+                                        title="Laisser un commentaire"
+                                        data-id="{{ picture.id }}"
                                         href="{{ asset('uploads/') ~ picture.filename ~ picture.extension  }}">
                                         <span class="overlay-img"></span>
                                         <span class="overlay-img-thumb font-icon-plus"></span>

@@ -17,15 +17,13 @@ class PictureModel extends AppModel
     private $height;
 
 
-    public function __construct($id = null)
-    {
-        // if ($id !== null)
-        // {
-        //     $picture = $this->findById($id);
-        //
-        //     print_r($picture);
-        // }
-    }
+    // public function __construct($id = null)
+    // {
+    //     if ($id !== null)
+    //     {
+    //         $picture = $this->findById($id);
+    //     }
+    // }
     /**
      * Get the value of Id
      *
@@ -236,6 +234,33 @@ class PictureModel extends AppModel
         return $data = $query->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
 
+    public static function findOneById(int $id)
+    {
+        $db = DBConnection::getInstance();
+
+        $stmt= "SELECT
+                    p.id,
+                    p.filename,
+                    p.extension,
+                    p.description,
+                    p.width,
+                    p.height,
+
+                    c.name as category_name
+                FROM
+                    picture p
+                LEFT JOIN
+                    category c ON p.id_category = c.id
+                WHERE
+                    p.id = :id";
+
+        $query = $db->prepare($stmt);
+        $query->bindValue(':id', $id, \PDO::PARAM_INT);
+
+        if ($query->execute())
+            return $data = $query->fetchObject(static::class);
+    }
+
     public static function findAllWithCategory()
     {
         $db = DBConnection::getInstance();
@@ -254,5 +279,25 @@ class PictureModel extends AppModel
         $query = $db->query($stmt);
 
         return $data = $query->fetchAll(\PDO::FETCH_CLASS, static::class);
+    }
+
+    public static function findByCategory($id_category)
+    {
+        $db = DBConnection::getInstance();
+
+        $stmt = "SELECT
+                    p.id,
+                    p.filename,
+                    p.extension,
+                    p.description
+                FROM
+                    picture p
+                WHERE
+                    p.id_category = :id_category";
+
+        $query = $db->prepare($stmt);
+        $query->bindValue(':id_category', $id_category, \PDO::PARAM_INT);
+        if ($query->execute())
+            return $data = $query->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
 }

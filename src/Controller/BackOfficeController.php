@@ -5,10 +5,10 @@ namespace Agnes\Controller;
 use Agnes\Util\DBConnection;
 use Agnes\Util\File;
 use Agnes\Util\Slugify;
-use Humps\FileUploader\FileUploader;
 use Agnes\Model\UserModel;
 use Agnes\Model\CategoryModel;
 use Agnes\Model\PictureModel;
+use Humps\FileUploader\FileUploader;
 
 
 class BackOfficeController extends AppController
