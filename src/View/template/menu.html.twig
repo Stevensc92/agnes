@@ -13,7 +13,7 @@
                 <li><a href="#work">Our Work</a></li>
                 <li><a href="#about">About Us</a></li>
                 <li><a href="{{ path('contact') }}">Contact</a></li>
-                {% if app.username is empty %}
+                {% if app.user.username is empty %}
                     <li><a href="#signUpModal" data-toggle="modal">Inscription</a></li>
                     <li><a href="#loginModal" data-toggle="modal">Login</a></li>
                 {% else %}
@@ -29,7 +29,7 @@
 </header>
 <!-- End Header -->
 
-{% if app.username is empty %}
+{% if app.user.username is empty %}
 <div id="loginModal" class="modal hide fade" tabindex="-1" role="dialog" arira-labelledby="myLoginModal" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
