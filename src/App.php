@@ -53,6 +53,7 @@ class App
         $this->router->map('POST', '/admin/picture/update', 'BackOfficeController#updatePicture',   'updatePicture');
         $this->router->map('POST', '/admin/picture/delete', 'BackOfficeController#deletePicture',   'deletePicture');
         $this->router->map('POST', '/ajax/getcomment',      'AjaxController#getComment',               'getComment');
+        $this->router->map('POST', '/ajax/addcomment',      'AjaxController#addComment',               'addComment');
 
         DBConnection::setConfig(Config::getConfig());
     }

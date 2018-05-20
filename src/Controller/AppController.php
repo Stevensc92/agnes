@@ -53,20 +53,18 @@ class AppController
         $path = new \Twig_Function('path', function(string $routeName, ...$params){
             $url = $this->router->generate($routeName);
 
-            if (isset($params)) {
+            if (isset($params) && count($params) > 0) {
                 foreach ($params as $param) {
-                    // print_r($url);
                     preg_match('/\[([a-z]+):([a-z]+)\]/', $url, $urlParam);
                     $url = str_replace($urlParam[0], $param[$urlParam[2]], $url);
                     $url = str_replace('agnes2/', '/agnes2', $url);
                 }
             }
-            else
-                $url = str_replace('agnes2/', '/agnes2', $this->router->generate($routeName, $params));
+            else {
+                $url = str_replace('agnes2/', '/agnes2', $url);
+            }
 
             return $url;
-            // var_dump($url);
-            // $url = preg_replace('#([a-z]{1}:[a-z]{1,})#', $params)
         });
 
         /**
@@ -76,9 +74,7 @@ class AppController
          * @return boolean
          */
         $is_granted = new \Twig_Function('is_granted', function(string $role){
-            if ($role === $_SESSION['user']['role'])
-                return true;
-            return false;
+            return $this->is_granted($role);
         });
 
         /**
@@ -102,7 +98,7 @@ class AppController
         });
 
         $displayVar = new \Twig_Function('displayVar', function(string $data) {
-            return htmlentities($data);
+            return htmlspecialchars($data);
         });
 
         $getExtension = new \Twig_Function('getExtension', function(string $filename) {
@@ -128,10 +124,12 @@ class AppController
 
         if (isset($_SESSION['user']))
         {
-            $this->twig->addGlobal('app', array(
-                'username'  => $_SESSION['user']['username'],
-                'role'      => $_SESSION['user']['role'],
-            ));
+            $this->twig->addGlobal('app', [
+                'user' => [
+                    'username'  => $_SESSION['user']['username'],
+                    'role'      => $_SESSION['user']['role'],
+                ],
+            ]);
         }
 
         if (isset($_SESSION['flashMessage']))

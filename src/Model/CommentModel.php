@@ -189,4 +189,13 @@ class CommentModel extends AppModel
             return $query->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
 
+    public function insert($data = '')
+    {
+        $data = [];
+        foreach(get_object_vars($this) as $key => $value)
+            $data[$key] = $value;
+
+        parent::insert($data);
+    }
+
 }

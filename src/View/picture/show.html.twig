@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+    {% extends 'base.html.twig' %}
 
 {% set slider = true %}
 
@@ -12,6 +12,7 @@
                 <a href="{{ path('showCategory', {'category': slugify(picture.category_name)}) }}">{{ picture.category_name }}</a>
                 <h1>Commentaire</h1>
                 {% if comments is not empty %}
+                    <div id="pagination"></div>
                     <div class="comment-list">
                     {% for comment in comments %}
                         <div class="comment">
@@ -24,10 +25,23 @@
                         </div>
                     {% endfor %}
                     </div>
+
+                    {% if app.user.username is not empty %}
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <div id="response"></div>
+                        <form method="post" class="form">
+                            <p>
+                                <textarea id="com_content" placeholder="Votre message" name="comment_content"></textarea>
+                            </p>
+                            <p>
+                                <a id="send-comment" class="submit" href="#">Envoyer le commentaire</a>
+                            </p>
+                        </form>
+                        {% endif %}
+                    {% endif %}
                 {% else %}
                 <p>Aucun commentaire</p>
                 {% endif %}
-                <div id="pagination"></div>
                 {# {{ nb_comment }} #}
             </div>
             <div class="span6">
@@ -54,14 +68,67 @@ jQuery(function($){
     }
 
     var nbComment = {{ nb_comment }};
-    var idPicture = {{ picture.id }}
+    var idPicture = {{ picture.id }};
     var commentPerPage = 5;
 
     var $commentDiv = $('.comment-list');
 
     var nbPage = Math.ceil(nbComment / commentPerPage);
-    // console.log(nbComment);
-    // console.log(nbPage);
+
+    {% if app.user.username is not empty %}
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    $('#send-comment').on('click', function() {
+        var username = '{{ app.user.username }}';
+        var com_content = $('#com_content').val();
+        var responseDiv = $('#response');
+        var minMessage = 5;
+
+        if (com_content.length > minMessage) {
+            $.post(
+                '/agnes2/ajax/addcomment',
+                {
+                    id_picture: idPicture,
+                    username: username,
+                    com_content: com_content,
+                },
+                function (data) {
+                    $('#com_content').val('');
+
+                    var commentHtml = '';
+
+                    for (var i = 0; i < data.length; i++) {
+                        var com_username = data[i].com_username;
+                        var com_createdAt = data[i].com_createdAt;
+                        var com_content = data[i].com_content;
+
+                        commentHtml += '<div class="comment">'+
+                                            '<blockquote>'+
+                                                '<small>Par '+com_username+' Le '+com_createdAt+'</small>'+
+                                                '<p>'+com_content+'</p>'+
+                                            '</blockquote>'+
+                                        '</div>';
+                    }
+
+                    $commentDiv.animate({
+                        'opacity': 0
+                    }, 500, function() {
+                        $commentDiv.html(commentHtml).animate({
+                            'opacity': 1
+                        });
+                    });
+
+                    responseDiv.empty();
+                },
+                'json'
+            );
+        } else {
+            responseDiv.empty().html('<div class="alert alert-error fade in" style="margin-bottom:10px!important;">Le commentaire doit etre d\'au moins '+minMessage+' caractères</div>');
+        }
+        return false;
+    });
+        {% endif %}
+    {% endif %}
+
     if (nbPage > 1) {
         var currentPage = 1;
         var pagination = $('#pagination');
