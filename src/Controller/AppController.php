@@ -42,7 +42,11 @@ class AppController
          */
 
         $asset = new \Twig_Function('asset', function(string $param): string {
-            $publicDir = "/$this->basePath/public/";
+            if ($this->basePath != '')
+                $publicDir = "/$this->basePath";
+            else
+                $publicDir = "";
+            $publicDir .= "/public/";
             return $publicDir.$param;
         });
 
