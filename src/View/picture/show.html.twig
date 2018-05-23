@@ -25,24 +25,23 @@
                         </div>
                     {% endfor %}
                     </div>
-
-                    {% if app.user.username is not empty %}
-                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        <div id="response"></div>
-                        <form method="post" class="form">
-                            <p>
-                                <textarea id="com_content" placeholder="Votre message" name="comment_content"></textarea>
-                            </p>
-                            <p>
-                                <a id="send-comment" class="submit" href="#">Envoyer le commentaire</a>
-                            </p>
-                        </form>
-                        {% endif %}
-                    {% endif %}
                 {% else %}
                 <p>Aucun commentaire</p>
                 {% endif %}
-                {# {{ nb_comment }} #}
+
+                {% if app.user.username is not empty %}
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <div id="response"></div>
+                    <form method="post" class="form">
+                        <p>
+                            <textarea id="com_content" placeholder="Votre message" name="comment_content"></textarea>
+                        </p>
+                        <p>
+                            <a id="send-comment" class="submit" href="#">Envoyer le commentaire</a>
+                        </p>
+                    </form>
+                    {% endif %}
+                {% endif %}
             </div>
             <div class="span6">
                 <div class="show-image">

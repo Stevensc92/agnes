@@ -11,9 +11,11 @@ class AppController
     protected $twig;
     protected $router;
     protected $session;
+    private $basePath;
 
-    public function __construct(\AltoRouter $router)
+    public function __construct(\AltoRouter $router, $basePath)
     {
+        $this->basePath = $basePath;
         $this->router = $router;
 
         $loader = new \Twig_Loader_Filesystem('src/View/');
@@ -40,7 +42,7 @@ class AppController
          */
 
         $asset = new \Twig_Function('asset', function(string $param): string {
-            $publicDir = '/agnes2/public/';
+            $publicDir = "/$this->basePath/public/";
             return $publicDir.$param;
         });
 

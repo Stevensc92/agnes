@@ -25,7 +25,7 @@ class PictureController extends AppController
         echo $this->twig->render('picture/show.html.twig', array(
             'picture'       => $picture,
             'comments'      => $comments,
-            'nb_comment'    => count(CommentModel::findAll()),
+            'nb_comment'    => count($comments),
         ));
     }
 
