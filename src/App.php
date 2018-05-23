@@ -10,14 +10,13 @@ use Agnes\Util\Router;
 class App
 {
     private $router;
+    private $basePath = 'agnes2/';
 
     public function __construct()
     {
         $this->router = new Router();
 
-        $basePath = str_replace("\src", "", str_replace($_SERVER['DOCUMENT_ROOT'], "", __DIR__));
-
-        $this->router->setBasePath('agnes2/');
+        $this->router->setBasePath($this->basePath);
 
         /**
          * Primary routes
@@ -69,7 +68,7 @@ class App
             $controllerName = "\\Agnes\Controller\\" . $target[0];
             $methodName = $target[1];
 
-            $controller = new $controllerName($this->router);
+            $controller = new $controllerName($this->router, $this->basePath);
 
             call_user_func([$controller, $methodName], $match['params']);
         }
