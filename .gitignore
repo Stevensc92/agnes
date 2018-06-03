@@ -1,3 +1,4 @@
 /vendor/
 /src/Config/config.php
 /public/uploads/
+/compilation_cache/
