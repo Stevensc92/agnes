@@ -10,7 +10,7 @@ use Agnes\Util\Router;
 class App
 {
     private $router;
-    private $basePath = 'agnes2/';
+    private $basePath = BASEPATH;
 
     public function __construct()
     {
@@ -75,7 +75,7 @@ class App
         }
         else
         {
-            $controller = new AppController($this->router);
+            $controller = new AppController($this->router, $this->basePath);
 
             $controller->notFound();
         }
