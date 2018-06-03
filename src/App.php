@@ -23,6 +23,7 @@ class App
          */
         $this->router->map('GET', '/', 'IndexController#index', 'index');
         $this->router->map('GET', '/contact', 'IndexController#contact', 'contact');
+        $this->router->map('GET|POST', '/calendar/[i:month]?/[i:year]?', 'CalendarController#index',  'indexCalendar');
 
 
         /**

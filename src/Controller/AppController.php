@@ -46,7 +46,7 @@ class AppController
                 $publicDir = "/$this->basePath";
             else
                 $publicDir = "";
-            $publicDir .= "/public/";
+            $publicDir .= "public/";
             return $publicDir.$param;
         });
 
@@ -57,17 +57,21 @@ class AppController
          * @return string path
          */
         $path = new \Twig_Function('path', function(string $routeName, ...$params){
-            $url = $this->router->generate($routeName);
-
             if (isset($params) && count($params) > 0) {
-                foreach ($params as $param) {
-                    preg_match('/\[([a-z]+):([a-z]+)\]/', $url, $urlParam);
-                    $url = str_replace($urlParam[0], $param[$urlParam[2]], $url);
-                    $url = str_replace('agnes2/', '/agnes2', $url);
+                if (is_array($params[0])) {
+                    $tmp = $params;
+                    $params = $tmp[0];
                 }
+                $url = $this->router->generate($routeName, $params);
+            } else {
+                $url = $this->router->generate($routeName);
             }
-            else {
-                $url = str_replace('agnes2/', '/agnes2', $url);
+
+            if ($this->basePath == 'agnes2/') {
+                $toSearch = $this->basePath.'/';
+                $isSlasher = strpos($url, $toSearch);
+                if ($isSlasher == 0)
+                    $url = str_replace($toSearch, '/'.$this->basePath, $url);
             }
 
             return $url;
@@ -116,6 +120,31 @@ class AppController
             return $data;
         });
 
+        /** Function php into twig **/
+
+        $current = new \Twig_Function('current', function(&$arr) {
+            return current($arr);
+        });
+
+        $substr = new \Twig_Function('substr', function($string, $start, $length = null) {
+            if ($length != null && is_int($length))
+                return substr($string, $start, $length);
+
+            return substr($string, $start);
+        });
+
+        $end = new \Twig_Function('end', function(&$arr) {
+            return end($arr);
+        });
+
+        $strtotime = new \Twig_Function('strtotime', function($time) {
+            return strtotime($time);
+        });
+
+        $clone = new \Twig_Function('clone', function($var) {
+            return clone($var);
+        });
+
         $this->twig->addFunction($asset);
         $this->twig->addFunction($path);
         $this->twig->addFunction($is_granted);
@@ -124,6 +153,11 @@ class AppController
         $this->twig->addFunction($displayVar);
         $this->twig->addFunction($getExtension);
         $this->twig->addFunction($str_replace);
+        $this->twig->addFunction($current);
+        $this->twig->addFunction($substr);
+        $this->twig->addFunction($end);
+        $this->twig->addFunction($strtotime);
+        $this->twig->addFunction($clone);
 
         @$this->session->flash = new FlashMessage();
 
