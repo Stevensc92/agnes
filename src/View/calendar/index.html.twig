@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+
+{% set slider = true %}
+
+{% block body %}
+
+<div id="focus" class="page">
+    <div class="container">
+        <h1>{{ month.toString }}</h1>
+
+
+        {% set previousMonth    = {'month': pMm, 'year': pMy} %}
+        {% set nextMonth        = {'month': nMm, 'year': nMy} %}
+
+        <div class="d-flex justify-content-between">
+            <a href="#" class="btn btn-primary previous">&lt;</a>
+            <a href="#" class="btn btn-primary next">&gt;</a>
+        </div>
+
+
+        <table class="calendar__table calendar__table--{{ weeks }}weeks">
+            {% for i in 0..weeks %}
+            <tr>
+                {% for key, day in month.days %}
+                    {% set followingDay = key + i * 7 %}
+                    {% set date = clone(start).modify("+"~followingDay~" days") %}
+                    <td class="{% if month.withinMonths(date) %}{% else %}calendar__othermonth{% endif %}">
+                        {% if i == 0 %}
+                        <div class="calendar__weekday">{{ day }}</div>
+                        {% endif %}
+                        <div class="calendar__day">{{ date.format('d') }}</div>
+                    </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+jQuery(function($){
+    var calendar = {
+        init: function() {
+            var pMm = {{ pMm }};
+            var pMy = {{ pMy }};
+            var nMm = {{ nMm }};
+            var nMy = {{ nMy }};
+
+            var previous = false;
+            var next = false;
+
+            $('td').on('click', function() {
+                var str = $('body').find('h1').text();
+                console.log(str);
+            });
+
+            $('.previous').on('click', function(e) {
+                e.preventDefault();
+                if (previous) {
+                    pMm = pMm - 1;
+                    nMm = nMm - 1;
+                    if (pMm < 1) {
+                        pMm = 12;
+                        pMy = pMy - 1;
+                    }
+                } else {
+                    previous = true;
+                    nMm = nMm - 1;
+                }
+                calendar.previousMonth(pMm, pMy);
+            });
+
+            $('.next').on('click', function(e) {
+                e.preventDefault();
+                if (next) {
+                    nMm = nMm + 1;
+                    pMm = pMm + 1;
+                    if (nMm > 12) {
+                        nMm = 1;
+                        nMy = nMy + 1;
+                    }
+                } else {
+                    next = true;
+                    pMm = pMm + 1;
+                }
+                calendar.nextMonth(nMm, nMy);
+            });
+        },
+
+        previousMonth: function(pMonth, pYear) {
+            console.log('blabla');
+            $.get(
+                "{{ path('indexCalendar') }}",
+                {
+                    month: pMonth,
+                    year: pYear
+                },
+                function(response) {
+                    calendar.createMonth(response);
+                },
+                'json'
+            );
+        },
+
+        nextMonth: function(nMonth, nYear) {
+            $.get(
+                "{{ path('indexCalendar') }}",
+                {
+                    month: nMonth,
+                    year: nYear
+                },
+                function(response) {
+                    calendar.createMonth(response);
+                },
+                'json'
+            );
+        },
+
+        createMonth: function(data) {
+            var title = $('.container').find('h1');
+            var table = $('.calendar__table');
+
+            title.html('').fadeOut();
+
+            table.html('').fadeOut();
+
+            title.html(data.title).fadeIn();
+
+            table.html(data.table).fadeIn();
+            // console.log(data);
+            // console.log(data.find('.container'));
+            // html += '<h1>'+data.month.toString()+'</h1>';
+
+            // console.log(html);
+        }
+    };
+
+calendar.init();
+});
+</script>
+{% endblock %}

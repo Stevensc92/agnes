@@ -110,6 +110,50 @@
 }
 
 /* ==================================================
+  Calendar Style
+================================================== */
+
+.calendar__table {
+    margin-top: 25px;
+    width: 100%;
+    height: calc(100vh - 50px);
+}
+
+.calendar__table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    vertical-align: top;
+    width: 14.29%;
+    height: 20%;
+}
+
+.calendar__table td:hover {
+    padding-top: 15px;
+    cursor: pointer;
+    /* border: 1px dashed #d1b577; */
+}
+
+.calendar__table--6weeks {
+    height: 16.66%;
+}
+
+.calendar__weekday {
+    text-align: right;
+    font-weight: bold;
+    color: #fff;
+    font-size: 1.2em;
+}
+
+.calendar__day {
+    font-size: 1.3em;
+    text-align: right;
+}
+
+.calendar__othermonth .calendar__day {
+    opacity: 0.3;
+}
+
+/* ==================================================
   Pagination Style
 ================================================== */
 .page.active

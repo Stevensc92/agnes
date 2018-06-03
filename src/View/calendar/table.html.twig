@@ -1,0 +1,16 @@
+<table class="calendar__table calendar__table--{{ weeks }}weeks">
+    {% for i in 0..weeks %}
+    <tr>
+        {% for key, day in month.days %}
+            {% set followingDay = key + i * 7 %}
+            {% set date = clone(start).modify("+"~followingDay~" days") %}
+            <td class="{% if month.withinMonths(date) %}{% else %}calendar__othermonth{% endif %}">
+                {% if i == 0 %}
+                <div class="calendar__weekday">{{ day }}</div>
+                {% endif %}
+                <div class="calendar__day">{{ date.format('d') }}</div>
+            </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>

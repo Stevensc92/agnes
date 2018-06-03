@@ -12,6 +12,7 @@
             	<li class="current"><a href="#home-slider">Index</a></li>
                 <li><a href="#work">Our Work</a></li>
                 <li><a href="#about">About Us</a></li>
+                <li><a href="{{ path('indexCalendar') }}">Calendrier</a></li>
                 <li><a href="{{ path('contact') }}">Contact</a></li>
                 {% if app.user.username is empty %}
                     <li><a href="#signUpModal" data-toggle="modal">Inscription</a></li>
