@@ -64,12 +64,20 @@ jQuery(function($){
                     nMm = nMm - 1;
                     if (pMm < 1) {
                         pMm = 12;
+                        if (nMm < 1) {
+                            nMm = 12;
+                        }
                         pMy = pMy - 1;
                     }
                 } else {
                     previous = true;
                     nMm = nMm - 1;
                 }
+                console.log('end previous');
+                console.log('previousMonth: month = '+pMm);
+                console.log('previousMonth: year = '+pMy);
+                console.log('nextMonth: month = '+nMm);
+                console.log('nextMonth: year = '+nMy);
                 calendar.previousMonth(pMm, pMy);
             });
 
@@ -80,18 +88,25 @@ jQuery(function($){
                     pMm = pMm + 1;
                     if (nMm > 12) {
                         nMm = 1;
+                        if (pMm > 12) {
+                            pMm = 1;
+                        }
                         nMy = nMy + 1;
                     }
                 } else {
                     next = true;
                     pMm = pMm + 1;
                 }
+                console.log('end next');
+                console.log('previousMonth: month = '+pMm);
+                console.log('previousMonth: year = '+pMy);
+                console.log('nextMonth: month = '+nMm);
+                console.log('nextMonth: year = '+nMy);
                 calendar.nextMonth(nMm, nMy);
             });
         },
 
         previousMonth: function(pMonth, pYear) {
-            console.log('blabla');
             $.get(
                 "{{ path('indexCalendar') }}",
                 {
