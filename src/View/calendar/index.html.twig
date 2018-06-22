@@ -4,36 +4,37 @@
 
 {% block body %}
 
+{% set previousMonth    = {'month': pMm, 'year': pMy} %}
+{% set nextMonth        = {'month': nMm, 'year': nMy} %}
+
 <div id="focus" class="page">
     <div class="container">
-        <h1>{{ month.toString }}</h1>
+        <div class="span12 calendar__content">
+            <h1>{{ month.toString }}</h1>
+
+            <div class="d-flex justify-content-between">
+                <a href="{{ path('indexCalendar', {'month': pMm, 'year': pMy}) }}" class="btn btn-primary previous">&lt;</a>
+                <a href="{{ path('indexCalendar', {'month': nMm, 'year': nMy}) }}" class="btn btn-primary next">&gt;</a>
+            </div>
 
 
-        {% set previousMonth    = {'month': pMm, 'year': pMy} %}
-        {% set nextMonth        = {'month': nMm, 'year': nMy} %}
-
-        <div class="d-flex justify-content-between">
-            <a href="#" class="btn btn-primary previous">&lt;</a>
-            <a href="#" class="btn btn-primary next">&gt;</a>
-        </div>
-
-
-        <table class="calendar__table calendar__table--{{ weeks }}weeks">
-            {% for i in 0..weeks %}
-            <tr>
-                {% for key, day in month.days %}
-                    {% set followingDay = key + i * 7 %}
-                    {% set date = clone(start).modify("+"~followingDay~" days") %}
-                    <td class="{% if month.withinMonths(date) %}{% else %}calendar__othermonth{% endif %}">
-                        {% if i == 0 %}
-                        <div class="calendar__weekday">{{ day }}</div>
-                        {% endif %}
-                        <div class="calendar__day">{{ date.format('d') }}</div>
-                    </td>
+            <table class="calendar__table calendar__table--{{ weeks }}weeks">
+                {% for i in 0..weeks %}
+                <tr>
+                    {% for key, day in month.days %}
+                        {% set followingDay = key + i * 7 %}
+                        {% set date = clone(start).modify("+"~followingDay~" days") %}
+                        <td class="{% if month.withinMonths(date) %}{% else %}calendar__othermonth{% endif %}">
+                            {% if i == 0 %}
+                            <div class="calendar__weekday">{{ day }}</div>
+                            {% endif %}
+                            <div class="calendar__day">{{ date.format('d') }}</div>
+                        </td>
+                    {% endfor %}
+                </tr>
                 {% endfor %}
-            </tr>
-            {% endfor %}
-        </table>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -44,112 +45,20 @@
 jQuery(function($){
     var calendar = {
         init: function() {
-            var pMm = {{ pMm }};
-            var pMy = {{ pMy }};
-            var nMm = {{ nMm }};
-            var nMy = {{ nMy }};
-
-            var previous = false;
-            var next = false;
-
             $('td').on('click', function() {
-                var str = $('body').find('h1').text();
-                console.log(str);
+                var $day = $(this).find('.calendar__day').text();
+                var $month = $('body').find('h1').text();
+                var $calendarContent = $('.calendar__content');
+
+                $calendarContent.removeClass('span12').addClass('span8');
+                $calendarContent.parent().append('<div class="span4">');
+
+                console.log(this);
+                // console.log($(this).find('h1').text());
+                console.log($month);
+
+                return false;
             });
-
-            $('.previous').on('click', function(e) {
-                e.preventDefault();
-                if (previous) {
-                    pMm = pMm - 1;
-                    nMm = nMm - 1;
-                    if (pMm < 1) {
-                        pMm = 12;
-                        if (nMm < 1) {
-                            nMm = 12;
-                        }
-                        pMy = pMy - 1;
-                    }
-                } else {
-                    previous = true;
-                    nMm = nMm - 1;
-                }
-                console.log('end previous');
-                console.log('previousMonth: month = '+pMm);
-                console.log('previousMonth: year = '+pMy);
-                console.log('nextMonth: month = '+nMm);
-                console.log('nextMonth: year = '+nMy);
-                calendar.previousMonth(pMm, pMy);
-            });
-
-            $('.next').on('click', function(e) {
-                e.preventDefault();
-                if (next) {
-                    nMm = nMm + 1;
-                    pMm = pMm + 1;
-                    if (nMm > 12) {
-                        nMm = 1;
-                        if (pMm > 12) {
-                            pMm = 1;
-                        }
-                        nMy = nMy + 1;
-                    }
-                } else {
-                    next = true;
-                    pMm = pMm + 1;
-                }
-                console.log('end next');
-                console.log('previousMonth: month = '+pMm);
-                console.log('previousMonth: year = '+pMy);
-                console.log('nextMonth: month = '+nMm);
-                console.log('nextMonth: year = '+nMy);
-                calendar.nextMonth(nMm, nMy);
-            });
-        },
-
-        previousMonth: function(pMonth, pYear) {
-            $.get(
-                "{{ path('indexCalendar') }}",
-                {
-                    month: pMonth,
-                    year: pYear
-                },
-                function(response) {
-                    calendar.createMonth(response);
-                },
-                'json'
-            );
-        },
-
-        nextMonth: function(nMonth, nYear) {
-            $.get(
-                "{{ path('indexCalendar') }}",
-                {
-                    month: nMonth,
-                    year: nYear
-                },
-                function(response) {
-                    calendar.createMonth(response);
-                },
-                'json'
-            );
-        },
-
-        createMonth: function(data) {
-            var title = $('.container').find('h1');
-            var table = $('.calendar__table');
-
-            title.html('').fadeOut();
-
-            table.html('').fadeOut();
-
-            title.html(data.title).fadeIn();
-
-            table.html(data.table).fadeIn();
-            // console.log(data);
-            // console.log(data.find('.container'));
-            // html += '<h1>'+data.month.toString()+'</h1>';
-
-            // console.log(html);
         }
     };
 

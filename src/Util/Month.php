@@ -66,16 +66,30 @@ class Month
 
     /**
      * Return month in fully letters with year
-     * @return string [description]
+     * @return string
      */
     public function toString(): string {
         return $this->months[$this->month - 1] . ' '.$this->year;
     }
 
+    /**
+     * Return the weeks number of a month
+     * @return int
+     */
     public function getWeeks(): int {
         $start = $this->getFirstDay();
         $end = (clone $start)->modify('+1 month -1 day');
-        $weeks = intval($end->format('W')) - intval($start->format('W'));
+
+        var_dump($end->format('W'));
+        if (intval($end->format('W')) == 01) {
+            $endDec = (clone $start)->modify('+1 month -3 day');
+            $endDec = $endDec->format('W')+1;
+        }
+
+        if (isset($endDec))
+            $weeks = intval($endDec) - intval($start->format('W'));
+        else
+            $weeks = intval($end->format('W')) - intval($start->format('W'));
 
         if ($weeks < 0) {
             $weeks = intval($end->format('W'));
@@ -84,10 +98,19 @@ class Month
         return $weeks;
     }
 
+    /**
+     * Compare a day if is in the current month or in the next/prev month
+     * @param  DateTime $date
+     * @return bool
+     */
     public function withinMonths(\DateTime $date): bool {
         return $this->getFirstDay()->format('Y-m') === $date->format('Y-m');
     }
 
+    /**
+     * Return the following month
+     * @return Month
+     */
     public function nextMonth(): Month
     {
         $month = $this->month + 1;
@@ -96,10 +119,17 @@ class Month
         if ($month > 12) {
             $month = 1;
             $year += 1;
+            if ($year > 2019) {
+                $year = 2018;
+            }
         }
         return new Month($month, $year);
     }
 
+    /**
+     * Return the previous month
+     * @return Month
+     */
     public function previousMonth(): Month
     {
         $month = $this->month - 1;
@@ -108,6 +138,9 @@ class Month
         if ($month < 1) {
             $month = 12;
             $year -= 1;
+            if ($year < 2018) {
+              $year = 2019;
+            }
         }
         return new Month($month, $year);
     }
