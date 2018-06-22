@@ -21,11 +21,12 @@ class PictureController extends AppController
 
         $picture = PictureModel::findOneById($id);
         $comments = CommentModel::getAllByPictureIdLimit($id, 0, 5);
+        $nbComments = CommentModel::getAllByPictureId($id);
 
         echo $this->twig->render('picture/show.html.twig', array(
             'picture'       => $picture,
             'comments'      => $comments,
-            'nb_comment'    => count($comments),
+            'nbComments'    => count($nbComments),
         ));
     }
 

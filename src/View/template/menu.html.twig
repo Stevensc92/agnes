@@ -1,82 +1,99 @@
 <!-- Header -->
 <header>
-    <div class="sticky-nav">
-    	<a id="mobile-nav" class="menu-nav" href="#menu-nav"></a>
+  <div class="sticky-nav">
+    <a id="mobile-nav" class="menu-nav" href="#menu-nav"></a>
 
-        <div id="logo">
-        	<a id="goUp" href="{{ path('index') }}" title="Logo">Index</a>
-        </div>
-
-        <nav id="menu">
-        	<ul id="menu-nav">
-            	<li class="current"><a href="#home-slider">Index</a></li>
-                <li><a href="#work">Our Work</a></li>
-                <li><a href="#about">About Us</a></li>
-                <li><a href="{{ path('indexCalendar') }}">Calendrier</a></li>
-                <li><a href="{{ path('contact') }}">Contact</a></li>
-                {% if app.user.username is empty %}
-                    <li><a href="#signUpModal" data-toggle="modal">Inscription</a></li>
-                    <li><a href="#loginModal" data-toggle="modal">Login</a></li>
-                {% else %}
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('backOfficeIndex') }}">Administration</a></li>
-                    {% endif %}
-                    <li><a href="{{ path('logout') }}" class="external">Déconnexion</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-
+    <div id="logo">
+      <a id="goUp" href="{{ path('index') }}" title="Logo">Index</a>
     </div>
+
+    <nav id="menu">
+      <ul id="menu-nav">
+        <li class="current"><a href="#home-slider">Index</a></li>
+        <li><a href="#work">Our Work</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="{{ path('indexCalendar') }}">Calendrier</a></li>
+        <li><a href="{{ path('contact') }}">Contact</a></li>
+        {% if app.user.username is empty %}
+        <li><a href="#signUpModal" data-toggle="modal" data-target="#signUpModal">Inscription</a></li>
+        <li><a href="#loginModal" data-toggle="modal" data-target="#loginModal">Login</a></li>
+        {% else %}
+        {% if is_granted('ROLE_ADMIN') %}
+        <li><a href="{{ path('backOfficeIndex') }}">Administration</a></li>
+        {% endif %}
+        <li><a href="{{ path('logout') }}" class="external">Déconnexion</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+
+  </div>
 </header>
 <!-- End Header -->
 
 {% if app.user.username is empty %}
 <div id="loginModal" class="modal hide fade" tabindex="-1" role="dialog" arira-labelledby="myLoginModal" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3 id="myLoginModal">Connexion</h3>
-    </div>
+      </div>
 
-    <form action="{{ path('login') }}" method="post">
-        <div class="modal-body">
-            <label for="username">Pseudo :</label>
-            <input type="text" id="usernameLogin" name="username" value="{{ last_username }}" required/>
+      <div class="modal-body">
+        <form action="{{ path('login') }}" method="post">
+          <div class="form-group">
+            <label for="usernameLogin">Pseudo :</label>
+            <input type="text" id="usernameLogin" name="username" value="{{ last_username }}" required />
+          </div>
 
+          <div class="form-group">
             <label for="password">Mot de passe :</label>
             <input type="password" id="passwordLogin" name="password" required />
-        </div>
+          </div>
+      </div>
 
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-            <button class="btn btn-primary" type="submit" name="login">Connexion</button>
-        </div>
-    </form>
-
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn btn-primary" type="submit" name="login">Connexion</button>
+      	</form>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div id="signUpModal" class="modal hide fade" tabindex="-1" role="dialog" arira-labelledby="mySignUpModal" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-        <h3 id="myLoginModal">Inscrivez-vous</h3>
-    </div>
+  <div id="signUpModal" class="modal hide fade" tabindex="-1" role="dialog" arira-labelledby="mySignUpModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h3 id="myLoginModal">Inscrivez-vous</h3>
+        </div>
 
-    <form method="post" action="{{ path('signUp') }}">
         <div class="modal-body">
-            <label for="username">Pseudo :</label>
-            <input type="text" id="usernameRegister" name="signUpUsername" value="{{ lastUsername }}" required />
+          <form method="post" action="{{ path('signUp') }}">
+            <div class="form-group">
+              <label for="username">Pseudo :</label>
+              <input type="text" id="usernameRegister" name="signUpUsername" value="{{ lastUsername }}" required />
+            </div>
 
-            <label for="password">Mot de passe :</label>
-            <input type="password" id="passwordRegister" name="signUpPassword" required />
+          <div class="form-group">
+              <label for="password">Mot de passe :</label>
+              <input type="password" id="passwordRegister" name="signUpPassword" required />
+            </div>
 
+          <div class="form-group">
             <label for="email">Adresse mail :</label>
             <input type="email" id="email" name="signUpEmail" required />
+          </div>
         </div>
 
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-            <button class="btn btn-primary" type="submit" name="signUp">Inscription</button>
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+          <button class="btn btn-primary" type="submit" name="signUp">Inscription</button>
+          </form>
         </div>
-
-    </form>
+      </div>
+    </div>
+  </div>
 </div>
-{% endif %}
+  {% endif %}

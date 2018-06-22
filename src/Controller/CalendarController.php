@@ -3,10 +3,15 @@
 namespace Agnes\Controller;
 
 use Agnes\Model\CalendarModel;
+use Agnes\Model\EventsModel;
 use Agnes\Util\Month;
 
 class CalendarController extends AppController
 {
+  /**
+   * @Route('/calendar/?[i:month]/?[i:year]', name="indexCalendar")
+   * @Method('[GET|POST]')
+   */
     public function index(?array $params)
     {
         if (is_ajax()) {
@@ -23,15 +28,30 @@ class CalendarController extends AppController
             }
         }
 
+        $start = $month->getFirstDay();
+        $start = $start->format('N') === '1' ? $start : $month->getFirstDay()->modify('last monday');
+
+        $weeks = $month->getWeeks();
+        $end = (clone $start)->modify('+' .(6 + 7 * ($weeks -1) ).' days');
+
+        $events = new EventsModel();
+        $events = $events->getEventsBetween($start, $end);
+
+        $previousMonth  = $month->previousMonth()->month;
+        $previousYear   = $month->previousMonth()->year;
+        $nextMonth      = $month->nextMonth()->month;
+        $nextYear       = $month->nextMonth()->year;
 
         $data = [
             'month'     => $month,
-            'weeks'     => $month->getWeeks(),
-            'start'     => $month->getFirstDay()->modify('last monday'),
-            'pMm'       => $month->previousMonth()->month,
-            'pMy'       => $month->previousMonth()->year,
-            'nMm'       => $month->nextMonth()->month,
-            'nMy'       => $month->nextMonth()->year,
+            'weeks'     => $weeks,
+            'start'     => $start,
+            'end'       => $end,
+            'pMm'       => $previousMonth,
+            'pMy'       => $previousYear,
+            'nMm'       => $nextMonth,
+            'nMy'       => $nextYear,
+            'events'    => $events,
         ];
 
         if (is_ajax()) {
@@ -41,14 +61,6 @@ class CalendarController extends AppController
         } else {
             echo $this->twig->render('calendar/index.html.twig', $data);
         }
-        // $date = new CalendarModel();
-        // $year = Date('Y');
-        // echo $this->twig->render('calendar/index.html.twig', array(
-        //     'date' => $date,
-        //     'year' => $year,
-        //     'events' => $date->getEvents($year),
-        //     'dates' => $date->getAll($year),
-        // ));
 
     }
 }
