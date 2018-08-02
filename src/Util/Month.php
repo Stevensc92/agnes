@@ -80,7 +80,6 @@ class Month
         $start = $this->getFirstDay();
         $end = (clone $start)->modify('+1 month -1 day');
 
-        var_dump($end->format('W'));
         if (intval($end->format('W')) == 01) {
             $endDec = (clone $start)->modify('+1 month -3 day');
             $endDec = $endDec->format('W')+1;

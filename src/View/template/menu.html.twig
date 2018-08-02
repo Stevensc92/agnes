@@ -43,12 +43,12 @@
         <form action="{{ path('login') }}" method="post">
           <div class="form-group">
             <label for="usernameLogin">Pseudo :</label>
-            <input type="text" id="usernameLogin" name="username" value="{{ last_username }}" required />
+            <input type="text" id="usernameLogin" name="usernameLogin" value="{{ last_username }}" required />
           </div>
 
           <div class="form-group">
-            <label for="password">Mot de passe :</label>
-            <input type="password" id="passwordLogin" name="password" required />
+            <label for="passwordLogin">Mot de passe :</label>
+            <input type="password" id="passwordLogin" name="passwordLogin" required />
           </div>
       </div>
 
@@ -72,18 +72,18 @@
         <div class="modal-body">
           <form method="post" action="{{ path('signUp') }}">
             <div class="form-group">
-              <label for="username">Pseudo :</label>
-              <input type="text" id="usernameRegister" name="signUpUsername" value="{{ lastUsername }}" required />
+              <label for="usernameRegister">Pseudo :</label>
+              <input type="text" id="usernameRegister" name="usernameRegister" value="{{ lastUsername }}" required />
             </div>
 
           <div class="form-group">
-              <label for="password">Mot de passe :</label>
-              <input type="password" id="passwordRegister" name="signUpPassword" required />
+              <label for="passwordRegister">Mot de passe :</label>
+              <input type="password" id="passwordRegister" name="passwordRegister" required />
             </div>
 
           <div class="form-group">
-            <label for="email">Adresse mail :</label>
-            <input type="email" id="email" name="signUpEmail" required />
+            <label for="emailRegister">Adresse mail :</label>
+            <input type="email" id="emailRegister" name="emailRegister" required />
           </div>
         </div>
 

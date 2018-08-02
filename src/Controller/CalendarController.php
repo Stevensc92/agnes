@@ -35,7 +35,7 @@ class CalendarController extends AppController
         $end = (clone $start)->modify('+' .(6 + 7 * ($weeks -1) ).' days');
 
         $events = new EventsModel();
-        $events = $events->getEventsBetween($start, $end);
+        $events = $events->getEventsBetweenByDay($start, $end);
 
         $previousMonth  = $month->previousMonth()->month;
         $previousYear   = $month->previousMonth()->year;

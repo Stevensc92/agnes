@@ -15,8 +15,8 @@ class UserController extends AppController
     {
         if (isset($_POST['login']))
         {
-            $username = $_POST['username'];
-            $password = $_POST['password'];
+            $username = $_POST['usernameLogin'];
+            $password = $_POST['passwordLogin'];
 
             $user = UserModel::findByUsername($username);
 
@@ -66,9 +66,9 @@ class UserController extends AppController
      {
          if (isset($_POST['signUp']))
          {
-             $username = $_POST['signUpUsername'];
-             $hash = password_hash($_POST['signUpPassword'], PASSWORD_DEFAULT);
-             $email = $_POST['signUpEmail'];
+             $username = $_POST['usernameRegister'];
+             $hash = password_hash($_POST['passwordRegister'], PASSWORD_DEFAULT);
+             $email = $_POST['emailRegister'];
 
              $user = new UserModel();
              $user->setUsername($username);

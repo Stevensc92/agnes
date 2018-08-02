@@ -10,13 +10,12 @@
 <div id="focus" class="page">
     <div class="container">
         <div class="span12 calendar__content">
-            <h1>{{ month.toString }}</h1>
+            <h1 class="calendar__month"">{{ month.toString }}</h1>
 
             <div class="d-flex justify-content-between">
                 <a href="{{ path('indexCalendar', {'month': pMm, 'year': pMy}) }}" class="btn btn-primary previous">&lt;</a>
                 <a href="{{ path('indexCalendar', {'month': nMm, 'year': nMy}) }}" class="btn btn-primary next">&gt;</a>
             </div>
-
 
             <table class="calendar__table calendar__table--{{ weeks }}weeks">
                 {% for i in 0..weeks %}
@@ -24,16 +23,46 @@
                     {% for key, day in month.days %}
                         {% set followingDay = key + i * 7 %}
                         {% set date = clone(start).modify("+"~followingDay~" days") %}
+                        {% set eventsForDay = events[date] %}
+                        {{ dump(eventsForDay) }}
                         <td class="{% if month.withinMonths(date) %}{% else %}calendar__othermonth{% endif %}">
                             {% if i == 0 %}
                             <div class="calendar__weekday">{{ day }}</div>
                             {% endif %}
                             <div class="calendar__day">{{ date.format('d') }}</div>
+                            {% for evente in eventsForDay %}
+                                <div class="calendar__event">
+                                </div>
+                            {% endfor %}
                         </td>
                     {% endfor %}
                 </tr>
                 {% endfor %}
             </table>
+        </div>
+
+        <div class="span3 hidden reservation">
+            <h1>Réserver</h1>
+            <div class="current-date"></div>
+            <div>
+                <form method="post" action="">
+                    <div class="form-group">
+                        <label for="test">Titre</label>
+                        <input type="text" name="title" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <input type="text" name="description" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <input type="hidden" name="day" />
+                        <button type="submit" class="btn btn-info">Réserver</button>
+                        <button class="btn btn-danger reserv-canceled">Annuler</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -42,27 +71,71 @@
 
 {% block javascripts %}
 <script type="text/javascript">
-jQuery(function($){
-    var calendar = {
-        init: function() {
-            $('td').on('click', function() {
-                var $day = $(this).find('.calendar__day').text();
-                var $month = $('body').find('h1').text();
-                var $calendarContent = $('.calendar__content');
+    jQuery(function($){
+        var calendar = {
+            init: function() {
+                $('td').on('click', function() {
+                    var months = {
+                        'Janvier': 01,
+                        'Février': 2,
+                        'Mars': 3,
+                        'Avril': 4,
+                        'Mai': 5,
+                        'Juin': 06,
+                        'Juillet': 7,
+                        'Août': 8,
+                        'Septembre': 9,
+                        'Octobre': 10,
+                        'Novembre': 11,
+                        'Décembre': 12
+                    };
 
-                $calendarContent.removeClass('span12').addClass('span8');
-                $calendarContent.parent().append('<div class="span4">');
+                    var $calendarContent= $('.calendar__content');
+                    var $reservation    = $('.reservation');
 
-                console.log(this);
-                // console.log($(this).find('h1').text());
-                console.log($month);
+                    var $currentDay     = $(this).find('.calendar__day').text();
+                    var $monthYear      = $('.calendar__month').text();
 
-                return false;
-            });
-        }
-    };
+                    var spliter         = $monthYear.split(' ');
+                    var currentMonth    = spliter[0];
+                    var currentYear     = spliter[1];
 
-calendar.init();
-});
+                    $('.current-date').text('Le '+$currentDay+' '+currentMonth+' '+currentYear);
+
+                    currentMonth = months[currentMonth];
+                    if (currentMonth < 10) {
+                        currentMonth = '0'+currentMonth;
+
+                    }
+                    var $date = currentMonth+'-'+$currentDay+'-'+currentYear;
+
+                    console.log($date);
+                    $calendarContent.removeClass('span12').addClass('span8');
+                    $reservation.removeClass('hidden');
+                    $('input[type=hidden]').val($date);
+
+                    // console.log($cday);
+                    // console.log($month);
+
+                    return false;
+                });
+
+                $('.reserv-canceled').on('click', function() {
+                    var $reservation = $('.reservation');
+                    var $calendarContent = $('.calendar__content');
+                    if (!$reservation.hasClass('hidden')) {
+
+                        $reservation.addClass('hidden');
+                        $calendarContent.removeClass('span8').addClass('span12');
+                    }
+
+                    // Cancel animation button (refresh page)
+                    return false;
+                });
+            }
+        };
+
+        calendar.init();
+    });
 </script>
 {% endblock %}
