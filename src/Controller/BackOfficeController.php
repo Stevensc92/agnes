@@ -6,6 +6,7 @@ use Agnes\Util\DBConnection;
 use Agnes\Util\File;
 use Agnes\Util\Slugify;
 use Agnes\Model\UserModel;
+use Agnes\Model\EventsModel;
 use Agnes\Model\CategoryModel;
 use Agnes\Model\PictureModel;
 use Humps\FileUploader\FileUploader;
@@ -21,6 +22,8 @@ class BackOfficeController extends AppController
     {
         if (!$this->is_granted('ROLE_ADMIN'))
             $this->notFound();
+
+        echo $this->twig->render('admin/index.html.twig');
     }
 
     /**
@@ -57,11 +60,11 @@ class BackOfficeController extends AppController
         if ($errorMessage != '')
         {
             $this->session->flash->setFlashMessage($errorMessage, 'error');
-            $this->router->redirect('/agnes2/admin/picture/add');
+            $this->router->redirectToRoute('addPicture');
         }
 
-        $success;
-        $fail;
+        $success = 0;
+        $fail = 0;
 
         for ($i = 0; $i < count($_FILES['files']['name']); $i++)
         {
@@ -111,7 +114,7 @@ class BackOfficeController extends AppController
                 else
                 {
                     // sinon on supprime la photo de la base de donnée
-                    $picture->deleteById($pictureLastInsertId);
+                    $picture->deleteById($db->lastInsertId());
                     // et on incrémente une variable de fail
                     $fail++;
                 }
@@ -134,7 +137,7 @@ class BackOfficeController extends AppController
         }
 
         $this->session->flash->setFlashMessage($message, 'success');
-        $this->router->redirect('/agnes2/admin/picture/add');
+        $this->router->redirectToRoute('addPicture');
     }
 
     /**
@@ -198,7 +201,7 @@ class BackOfficeController extends AppController
                         $newName = Slugify::slug($column[1]);
                         $renamed = false;
 
-                        $link = '../agnes2/public/uploads/';
+                        $link = '../agnes/public/uploads/';
                         // Si le nom du fichier a bien été modifié
                         if (rename($link.$originFilename.$picture->getExtension(), $link.$newName.$picture->getExtension()))
                         {
@@ -251,5 +254,63 @@ class BackOfficeController extends AppController
 
             echo json_encode($response);
         }
+    }
+
+    /****************************
+     *                          *
+     *                          *
+     *                          *
+     *                          *
+     * Routes for Events        *
+     *                          *
+     *                          *
+     *                          *
+     *                          *
+     ****************************/
+
+    /**
+     * @Route("/admin/events/", name="listEvents")
+     * @Method("GET")
+     */
+    public function listEvents() {
+        $events = EventsModel::findAll();
+
+        echo $this->twig->render('admin/events/list.html.twig', array(
+            'events' => $events
+        ));
+    }
+
+    /**
+     * @Route("/admin/events/update/[i:id]", name="editEvent")
+     * @Method("GET|POST")
+     */
+    public function editEvent($param) {
+        $event = EventsModel::findById($param['id']);
+
+        var_dump($event);
+        die;
+
+        if (isset($_POST['event'])) {
+            $event = $_POST['event'];
+            var_dump($event);
+        }
+
+        echo $this->twig->render('admin/events/edit.html.twig', array(
+            'events' => $events
+        ));
+    }
+
+    /**
+     * @Route("/admin/events/delete/[i:id]", name="deleteEvent")
+     * @Method("POST")
+     */
+    public function deleteEvent($param) {
+        if (EventsModel::deleteById($param['id'])) {
+            $this->session->flash->setFlashMessage('L\'évènement a bien été supprimé.', 'success');
+        } else {
+            $this->session->flash->setFlashMessage('L\'évènement n\'a été supprimé.');
+        }
+
+        $this->router->redirectToRoute('listEvents');
     }
 }

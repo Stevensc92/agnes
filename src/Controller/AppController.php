@@ -24,13 +24,13 @@ class AppController
         if(preg_match('#localhost#', $_SERVER['HTTP_HOST']))
         {
             $this->twig = new \Twig_Environment($loader, array(
-                //'cache' => 'compilation_cache',
+                'cache' => false,
             ));
         }
         else
         {
             $this->twig = new \Twig_Environment($loader, array(
-                'cache' => 'compilation_cache',
+                'cache' => false,
             ));
         }
 
@@ -67,7 +67,7 @@ class AppController
                 $url = $this->router->generate($routeName);
             }
 
-            if ($this->basePath == 'agnes2/') {
+            if ($this->basePath == 'agnes/') {
                 $toSearch = $this->basePath.'/';
                 $isSlasher = strpos($url, $toSearch);
                 if ($isSlasher == 0)
@@ -93,7 +93,7 @@ class AppController
          * @param array|string var
          * @return void
          */
-        $dump = new \Twig_Function('dump', function(...$var) {
+        $dump = new \Twig_Function('dump', function($var) {
             return var_dump($var);
         });
 
@@ -145,6 +145,14 @@ class AppController
             return clone($var);
         });
 
+        $explode = new \Twig_Function('explode', function($delimiter, $string) {
+           return explode($delimiter, $string);
+        });
+
+        $implode = new \Twig_Function('implode', function($glue, $arr) {
+           return implode($glue, $arr);
+        });
+
         $this->twig->addFunction($asset);
         $this->twig->addFunction($path);
         $this->twig->addFunction($is_granted);
@@ -158,6 +166,8 @@ class AppController
         $this->twig->addFunction($end);
         $this->twig->addFunction($strtotime);
         $this->twig->addFunction($clone);
+        $this->twig->addFunction($explode);
+        $this->twig->addFunction($implode);
 
         @$this->session->flash = new FlashMessage();
 

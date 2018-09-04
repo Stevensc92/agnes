@@ -98,7 +98,7 @@ jQuery(function($){
                     var div = $("div").find(`[data-id="${$id}"]`);
 
                     $.post(
-						"/agnes2/admin/picture/delete",
+						"/agnes/admin/picture/delete",
                         {
                             id: $id,
                         },
@@ -188,7 +188,7 @@ jQuery(function($){
                     {
                         console.log('on commence la requete ajax');
                         $.post(
-                            "/agnes2/admin/picture/update",
+                            "/agnes/admin/picture/update",
                             {
                                 data,
                                 id: $id,

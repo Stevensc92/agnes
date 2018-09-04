@@ -47,13 +47,21 @@ class App
              $this->router->map('POST', '/admin/picture/upload',    'BackOfficeController#uploadPicture',   'uploadPicture');
              $this->router->map('GET',  '/admin/picture',           'BackOfficeController#listPicture',     'listPicture');
 
+            /**
+             * Events routes
+             */
+            $this->router->map('GET', '/admin/events',              'BackOfficeController#listEvents',      'listEvents');
+            $this->router->map('GET', '/admin/events/update/[i:id]','BackOfficeController#editEvent',       'editEvent');
+            $this->router->map('GET', '/admin/events/delete/[i:id]','BackOfficeController#deleteEvent',     'deleteEvent');
+
         /**
          * Ajax routes
          */
         $this->router->map('POST', '/admin/picture/update', 'BackOfficeController#updatePicture',   'updatePicture');
         $this->router->map('POST', '/admin/picture/delete', 'BackOfficeController#deletePicture',   'deletePicture');
-        $this->router->map('POST', '/ajax/getcomment',      'AjaxController#getComment',               'getComment');
-        $this->router->map('POST', '/ajax/addcomment',      'AjaxController#addComment',               'addComment');
+        $this->router->map('POST', '/ajax/getcomment',      'AjaxController#getComment',            'getComment');
+        $this->router->map('POST', '/ajax/addcomment',      'AjaxController#addComment',            'addComment');
+        $this->router->map('POST', '/ajax/reservation',     'AjaxController#putReservation',        'putReservation');
 
         DBConnection::setConfig(Config::getConfig());
     }

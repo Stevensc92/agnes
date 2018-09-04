@@ -39,6 +39,62 @@
     border-style: none;
 }
 
+#form-reservation
+{
+    width: 95%;
+}
+
+.reservation input
+{
+    width: 95%;
+}
+
+.reservation textarea
+{
+    width: 95%;
+    height: 120px;
+
+    max-width: 95%;
+    max-height: 500px;
+}
+
+.reservation button
+{
+    width: 40%;
+}
+
+.button-flex
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.input-text-error
+{
+    color: red;
+    font-size: 18px;
+    margin-top: -10px;
+}
+
+.input-error
+{
+    border: 3px red solid !important;
+}
+
+.form-success
+{
+    color: green;
+    font-size: 18px;
+}
+
+.form-error
+{
+    color: red;
+    font-size: 18px;
+}
+
 /* ==================================================
    Picture Style
 ================================================== */
@@ -153,6 +209,10 @@
     opacity: 0.3;
 }
 
+.calendar__event::before {
+    content:"• ";
+}
+
 /* ==================================================
   Calendar reservation Style
 ================================================== */
@@ -170,6 +230,31 @@
     color: #FFF;
 }
 
+/* ==================================================
+  Administration Style
+================================================== */
+#modules
+{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
+
+.mod
+{
+    width: 250px;
+    border: 2px solid red;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.mod .mod-title
+{
+    display: block;
+    font-size: 18px;
+    text-align: center;
+    color: green;
+}
 
 
 /* ==================================================

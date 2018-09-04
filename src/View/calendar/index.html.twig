@@ -10,7 +10,7 @@
 <div id="focus" class="page">
     <div class="container">
         <div class="span12 calendar__content">
-            <h1 class="calendar__month"">{{ month.toString }}</h1>
+            <h1 class="calendar__month">{{ month.toString }}</h1>
 
             <div class="d-flex justify-content-between">
                 <a href="{{ path('indexCalendar', {'month': pMm, 'year': pMy}) }}" class="btn btn-primary previous">&lt;</a>
@@ -19,24 +19,28 @@
 
             <table class="calendar__table calendar__table--{{ weeks }}weeks">
                 {% for i in 0..weeks %}
-                <tr>
-                    {% for key, day in month.days %}
-                        {% set followingDay = key + i * 7 %}
-                        {% set date = clone(start).modify("+"~followingDay~" days") %}
-                        {% set eventsForDay = events[date] %}
-                        {{ dump(eventsForDay) }}
-                        <td class="{% if month.withinMonths(date) %}{% else %}calendar__othermonth{% endif %}">
-                            {% if i == 0 %}
-                            <div class="calendar__weekday">{{ day }}</div>
-                            {% endif %}
-                            <div class="calendar__day">{{ date.format('d') }}</div>
-                            {% for evente in eventsForDay %}
-                                <div class="calendar__event">
-                                </div>
-                            {% endfor %}
-                        </td>
-                    {% endfor %}
-                </tr>
+                    <tr>
+                        {% for key, day in month.days %}
+                            {% set followingDay = key + i * 7 %}
+                            {% set date = clone(start).modify("+"~followingDay~" days") %}
+                            {% set string = date.date %}
+                            {% set dayOnDate = explode(" ", string) %}
+                            {% set eventsForDay = events[dayOnDate.0] %}
+                            <td class="{% if month.withinMonths(date) %}{% else %}calendar__othermonth{% endif %}">
+                                {% if i == 0 %}
+                                    <div class="calendar__weekday">{{ day }}</div>
+                                {% endif %}
+                                <div class="calendar__day">{{ date.format('d') }}</div>
+                                {% if eventsForDay is not empty %}
+                                    {% for event in eventsForDay %}
+                                        <div class="calendar__event">
+                                            {{ event.title }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
                 {% endfor %}
             </table>
         </div>
@@ -45,7 +49,7 @@
             <h1>Réserver</h1>
             <div class="current-date"></div>
             <div>
-                <form method="post" action="">
+                <form method="post" action="" id="form-reservation">
                     <div class="form-group">
                         <label for="test">Titre</label>
                         <input type="text" name="title" class="form-control" />
@@ -53,10 +57,10 @@
 
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <input type="text" name="description" class="form-control" />
+                        <textarea name="description" class="form-control"></textarea>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group button-flex">
                         <input type="hidden" name="day" />
                         <button type="submit" class="btn btn-info">Réserver</button>
                         <button class="btn btn-danger reserv-canceled">Annuler</button>
@@ -66,76 +70,157 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
 
 {% block javascripts %}
-<script type="text/javascript">
-    jQuery(function($){
-        var calendar = {
-            init: function() {
-                $('td').on('click', function() {
-                    var months = {
-                        'Janvier': 01,
-                        'Février': 2,
-                        'Mars': 3,
-                        'Avril': 4,
-                        'Mai': 5,
-                        'Juin': 06,
-                        'Juillet': 7,
-                        'Août': 8,
-                        'Septembre': 9,
-                        'Octobre': 10,
-                        'Novembre': 11,
-                        'Décembre': 12
-                    };
+    {% if is_granted('IS_AUTHENTICATED_FULLY') is same as(true) %}
+    <script type="text/javascript">
+        jQuery(function($){
 
-                    var $calendarContent= $('.calendar__content');
-                    var $reservation    = $('.reservation');
-
-                    var $currentDay     = $(this).find('.calendar__day').text();
-                    var $monthYear      = $('.calendar__month').text();
-
-                    var spliter         = $monthYear.split(' ');
-                    var currentMonth    = spliter[0];
-                    var currentYear     = spliter[1];
-
-                    $('.current-date').text('Le '+$currentDay+' '+currentMonth+' '+currentYear);
-
-                    currentMonth = months[currentMonth];
-                    if (currentMonth < 10) {
-                        currentMonth = '0'+currentMonth;
-
-                    }
-                    var $date = currentMonth+'-'+$currentDay+'-'+currentYear;
-
-                    console.log($date);
-                    $calendarContent.removeClass('span12').addClass('span8');
-                    $reservation.removeClass('hidden');
-                    $('input[type=hidden]').val($date);
-
-                    // console.log($cday);
-                    // console.log($month);
-
-                    return false;
-                });
-
-                $('.reserv-canceled').on('click', function() {
-                    var $reservation = $('.reservation');
-                    var $calendarContent = $('.calendar__content');
-                    if (!$reservation.hasClass('hidden')) {
-
-                        $reservation.addClass('hidden');
-                        $calendarContent.removeClass('span8').addClass('span12');
-                    }
-
-                    // Cancel animation button (refresh page)
-                    return false;
-                });
+            function alertInput(input, message) {
+                $(input).parent().append('<div class="input-text-error">'+message+'</div>');
+                $(input).addClass('input-error');
             }
-        };
 
-        calendar.init();
-    });
-</script>
+            var calendar = {
+                init: function() {
+                    $('td').on('click', function() {
+                        var months = {
+                            'Janvier': 1,
+                            'Février': 2,
+                            'Mars': 3,
+                            'Avril': 4,
+                            'Mai': 5,
+                            'Juin': 6,
+                            'Juillet': 7,
+                            'Août': 8,
+                            'Septembre': 9,
+                            'Octobre': 10,
+                            'Novembre': 11,
+                            'Décembre': 12
+                        };
+
+                        var $calendarContent= $('.calendar__content');
+                        var $reservation    = $('.reservation');
+
+                        var $currentDay     = $(this).find('.calendar__day').text();
+                        var $monthYear      = $('.calendar__month').text();
+
+                        var spliter         = $monthYear.split(' ');
+                        var currentMonth    = spliter[0];
+                        var currentYear     = spliter[1];
+
+                        $('.current-date').text('Le '+$currentDay+' '+currentMonth+' '+currentYear);
+
+                        currentMonth = months[currentMonth];
+                        if (currentMonth < 10) {
+                            currentMonth = '0'+currentMonth;
+                        }
+
+                        var $date = currentYear+'-'+currentMonth+'-'+$currentDay;
+
+                        console.log($date);
+                        $calendarContent.removeClass('span12').addClass('span8');
+                        $reservation.removeClass('hidden');
+                        $('input[type=hidden]').val($date);
+
+                        // console.log($cday);
+                        // console.log($month);
+
+                        return false;
+                    });
+
+                    $('.reserv-canceled').on('click', function(e) {
+                        e.preventDefault();
+                        var $reservation = $('.reservation');
+                        var $calendarContent = $('.calendar__content');
+                        if (!$reservation.hasClass('hidden')) {
+
+                            $reservation.addClass('hidden');
+                            $calendarContent.removeClass('span8').addClass('span12');
+                            document.getElementById('form-reservation').reset();
+                        }
+
+                        $('body').find('input').each(function() {
+                            if( $(this).hasClass('input-error')) {
+                                $(this).removeClass('input-error');
+                            }
+                        });
+
+                        $('body').find('textarea').each(function() {
+                            if( $(this).hasClass('input-error')) {
+                                $(this).removeClass('input-error');
+                            }
+                        });
+
+                        $('body').find('.input-text-error').each(function() {
+                            $(this).remove();
+                        })
+
+                        // Cancel animation button (refresh page)
+                        return false;
+                    });
+
+                    $('#form-reservation').on('submit', function(e) {
+                        // Cancel refresh page due to submit form
+                        e.preventDefault();
+                        $('body').find('form-success').remove();
+                        $('body').find('form-error').remove();
+                        var form = $(this).serializeArray();
+                        $.post(
+                            '{{ path('putReservation') }}',
+                            {
+                                data: form
+                            },
+                            function(result) {
+                                console.log(result);
+                                if (typeof result.error !== 'undefined' && result.error.length > 0) {
+                                    result.error.forEach(function(element) {
+                                        $('body').find('input').each(function() {
+                                            if (element.input == $(this).attr('name')) {
+                                                alertInput($(this), element.message);
+                                            }
+                                        });
+
+                                        $('body').find('textarea').each(function() {
+                                            if(element.input == $(this).attr('name')) {
+                                                alertInput($(this), element.message);
+                                            }
+                                        });
+                                    });
+                                } else {
+                                    if (typeof result.success.error !== 'undefined') {
+                                        $('.button-flex').parent().append('<div class="form-group"><span class="form-error">'+result.success.error+'</span></div>');
+                                    } else {
+                                        document.getElementById('form-reservation').reset();
+                                        $('body').find('input').each(function() {
+                                            if( $(this).hasClass('input-error')) {
+                                                $(this).removeClass('input-error');
+                                            }
+                                        });
+
+                                        $('body').find('textarea').each(function() {
+                                            if( $(this).hasClass('input-error')) {
+                                                $(this).removeClass('input-error');
+                                            }
+                                        });
+
+                                        $('body').find('.input-text-error').each(function() {
+                                            $(this).remove();
+                                        });
+
+                                        $('.button-flex').parent().append('<div class="form-group"><span class="form-success">'+result.success.success+'</span></div>');
+                                    }
+                                }
+                            },
+                            'json'
+                        )
+                    });
+                }
+            };
+
+            calendar.init();
+        });
+    </script>
+    {% endif %}
 {% endblock %}

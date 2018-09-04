@@ -67,10 +67,10 @@ class AppModel
         $query = $db->prepare($stmt);
         $query->bindValue(':id', $id, \PDO::PARAM_INT);
 
-        if ($query->execute() > 0)
-            return true;
+        if ($query->execute() == 0)
+            return false;
 
-        return false;
+        return true;
 
     }
 

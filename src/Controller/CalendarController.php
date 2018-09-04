@@ -22,6 +22,14 @@ class CalendarController extends AppController
             }
         } else {
             try {
+                if (isset($params['year'])) {
+                    if (@$params['year'] <= (date('Y') - 1))
+                        $this->router->redirectToRoute('indexCalendar', ['month' => @$params['month'], 'year' => date('Y')]);
+
+                    if (@$params['year'] >= (date('Y') + 2))
+                        $this->router->redirectRoute('indexCalendar', ['month' => @$params['month'], 'year' => date('Y')]);
+                }
+
                 $month = new Month(@$params['month'], @$params['year']);
             } catch (\Exception $e) {
                 $month = new Month();
@@ -32,7 +40,7 @@ class CalendarController extends AppController
         $start = $start->format('N') === '1' ? $start : $month->getFirstDay()->modify('last monday');
 
         $weeks = $month->getWeeks();
-        $end = (clone $start)->modify('+' .(6 + 7 * ($weeks -1) ).' days');
+        $end = (clone $start)->modify('+' .(6 + 7 * ($weeks +1) ).' days');
 
         $events = new EventsModel();
         $events = $events->getEventsBetweenByDay($start, $end);

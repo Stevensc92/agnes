@@ -84,7 +84,7 @@ jQuery(function($){
 
         if (com_content.length > minMessage) {
           $.post(
-            '/agnes2/ajax/addcomment',
+            '/agnes/ajax/addcomment',
             {
               id_picture: idPicture,
               username: username,
@@ -159,7 +159,7 @@ jQuery(function($){
       var first_com = ((currentPage - 1) * commentPerPage);
 
       $.post(
-        '/agnes2/ajax/getcomment',
+        '/agnes/ajax/getcomment',
         {
           id_picture: idPicture,
           commentPerPage: commentPerPage,

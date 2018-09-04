@@ -12,9 +12,9 @@ function is_ajax()
 }
 
 if (preg_match('#localhost#', $_SERVER['HTTP_HOST'])) {
-    define('BASEPATH', 'agnes2/');
+    define('BASEPATH', 'agnes/');
 } else {
-    define('BASEPATH', '');
+    define('BASEPATH', '/');
 }
 
 $app = new \Agnes\App;

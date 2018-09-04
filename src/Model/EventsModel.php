@@ -11,6 +11,7 @@ class EventsModel extends AppModel
   private $description;
   private $start;
   private $end;
+  private $isActive;
 
     /**
      * Get the value of Id
@@ -157,6 +158,30 @@ class EventsModel extends AppModel
     }
 
     /**
+     * Get the value of isActive
+     *
+     * @return mixed
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * Set the value of isActive
+     *
+     * @param mixed isActive
+     *
+     * @return self
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
      * @param \DateTime $start
      * @param \DateTime $end
      * @return mixed
@@ -165,33 +190,63 @@ class EventsModel extends AppModel
     {
       $db = DBConnection::getInstance();
 
+      $events = [];
       $stmt = "SELECT
                 *
               FROM
                 events e
               WHERE
-                start BETWEEN '{$start->format('Y-m-d 00:00:00')}' AND '{$end->format('Y-m-d 23:59:59')}'";
+                start BETWEEN '{$start->format('Y-m-d 00:00:00')}' AND '{$end->format('Y-m-d 23:59:59')}' AND isActive = 1";
 
       $query = $db->prepare($stmt);
       $query->bindValue(':startTime', $start->format('Y-m-d 00:00:00'));
       $query->bindValue(':endTime', $end->format('Y-m-d 23:59:59'));
       $query->execute();
-      return $query->fetchObject(static::class);
+
+      while($result = $query->fetchObject(static::class))
+          $events[] = $result;
+
+      return $events;
     }
 
     public function getEventsBetweenByDay(\DateTime $start, \DateTime $end) {
-        $events[] = $this->getEventsBetween($start, $end);
+        $events = $this->getEventsBetween($start, $end);
         $days = [];
-
         foreach ($events as $event) {
-            $date = explode(' ', $event->getStart())[0];
-            if (!isset($days[$date])) {
-                $days[$date] = [$event];
-            } else {
-                $days[$date][] = $event;
+            if ($event != false) {
+                $date = explode(' ', $event->getStart())[0];
+                if (!isset($days[$date])) {
+                    $days[$date] = [$event];
+                } else {
+                    $days[$date][] = $event;
+                }
             }
         }
+
         return $days;
+    }
+
+    public function add(): bool
+    {
+        $db = DBConnection::getInstance();
+
+        $stmt = "
+            INSERT INTO events(id_user, title, description, start, `end`)
+            VALUES(:id_user, :title, :description, :start, :end)
+        ";
+        $query = $db->prepare($stmt);
+        $query->bindValue(':id_user',           $this->getIdUser(),         \PDO::PARAM_STR);
+        $query->bindValue(':title',             $this->getTitle(),          \PDO::PARAM_STR);
+        $query->bindValue(':description',       $this->getDescription(),    \PDO::PARAM_STR);
+        $query->bindValue(':start',             $this->getStart(),          \PDO::PARAM_INT);
+        $query->bindValue(':end',               $this->getEnd(),            \PDO::PARAM_STR);
+
+        $query->execute();
+
+        if ($query)
+            return true;
+
+        return false;
     }
 
 }
