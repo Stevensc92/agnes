@@ -9,9 +9,9 @@
 
     <nav id="menu">
       <ul id="menu-nav">
-        <li class="current"><a href="#home-slider">Index</a></li>
-        <li><a href="#work">Our Work</a></li>
-        <li><a href="#about">About Us</a></li>
+        <li class="current"><a href="{{ path('index') }}">Index</a></li>
+        <li><a href="{{ path('index') }}#work">Photo</a></li>
+        <li><a href="{{ path('index') }}#about">À Propos de nous</a></li>
         <li><a href="{{ path('indexCalendar') }}">Calendrier</a></li>
         <li><a href="{{ path('contact') }}">Contact</a></li>
         {% if app.user.username is empty %}
