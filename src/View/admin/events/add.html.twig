@@ -7,9 +7,8 @@
     <div class="container">
         {% set data = {
             'method'        : 'post',
-            'action'        : 'editEvent',
-            'actionText'    : 'Modifier',
-            'form'          : event
+            'action'        : 'addEvent',
+            'actionText'    : 'Ajouter'
         } %}
         {% include 'admin/events/form.html.twig' with data %}
     </div>

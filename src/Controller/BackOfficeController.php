@@ -273,11 +273,47 @@ class BackOfficeController extends AppController
      * @Method("GET")
      */
     public function listEvents() {
-        $events = EventsModel::findAll();
+        if (!$this->is_granted('ROLE_ADMIN'))
+        {
+            $this->notFound();
+            return false;
+        }
+
+        $events = EventsModel::findAll('id DESC');
 
         echo $this->twig->render('admin/events/list.html.twig', array(
             'events' => $events
         ));
+    }
+
+    public function addEvent() {
+        if (!$this->is_granted('ROLE_ADMIN')) {
+            $this->notFound();
+            return false;
+        }
+
+        if (isset($_POST['addEvent'])) {
+            $event = new EventsModel();
+
+            if (!empty($_POST['id_user'])) {
+                $event->setIdUser($_POST['id_user']);
+            }
+            $event->setTitle($_POST['title'])
+                    ->setDescription($_POST['description'])
+                    ->setStart($_POST['start'].' 00:00:00')
+                    ->setEnd($_POST['end'].' 23:00:00')
+                    ->setIsActive(1);
+
+            if ($event->add()) {
+                $this->session->flash->setFlashMessage('L\évènement a bien été créé', 'success');
+            } else {
+                $this->session->flash->setFlashMessage('L\'évènement n\'a pas été créé', 'warning');
+            }
+
+            $this->router->redirectToRoute('listEvents');
+        }
+
+        echo $this->twig->render('admin/events/add.html.twig');
     }
 
     /**
@@ -285,18 +321,51 @@ class BackOfficeController extends AppController
      * @Method("GET|POST")
      */
     public function editEvent($param) {
+        if (!$this->is_granted('ROLE_ADMIN'))
+        {
+            $this->notFound();
+            return false;
+        }
+
         $event = EventsModel::findById($param['id']);
 
-        var_dump($event);
-        die;
+        $start = new \DateTime($event->getStart());
+        $start = $start->format('Y-m-d');
 
-        if (isset($_POST['event'])) {
-            $event = $_POST['event'];
-            var_dump($event);
+        $end = new \DateTime($event->getEnd());
+        $end = $end->format('Y-m-d');
+
+        $user = UserModel::findById($event->getIdUser());
+
+        $eventArray = [
+            'id' => $event->getId(),
+            'user' => ['id' => $user->getId(), 'username' => $user->getUsername()],
+            'title' => $event->getTitle(),
+            'description' => $event->getDescription(),
+            'start' => $start,
+            'end' => $end,
+            'isActive' => $event->getIsActive(),
+        ];
+
+        if (isset($_POST['editEvent'])) {
+
+            $data = [];
+            foreach ($_POST as $key => $value) {
+                if ($key != 'editEvent' && $key != 'id')
+                    $data[$key] = $value;
+            }
+
+            $item = new EventsModel();
+            if ($item->update($data, $_POST['id'])) {
+                $this->session->flash->setFlashMessage('L\évènement à bien été modifié', 'success');
+            } else {
+                $this->session->flash->setFlashMessage('L\'évènement n\'a pas été modifié', 'warning');
+            }
+            $this->router->redirectToRoute('listEvents');
         }
 
         echo $this->twig->render('admin/events/edit.html.twig', array(
-            'events' => $events
+            'event' => $eventArray
         ));
     }
 
@@ -305,6 +374,12 @@ class BackOfficeController extends AppController
      * @Method("POST")
      */
     public function deleteEvent($param) {
+        if (!$this->is_granted('ROLE_ADMIN'))
+        {
+            $this->notFound();
+            return false;
+        }
+
         if (EventsModel::deleteById($param['id'])) {
             $this->session->flash->setFlashMessage('L\'évènement a bien été supprimé.', 'success');
         } else {

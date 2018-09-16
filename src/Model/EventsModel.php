@@ -2,6 +2,7 @@
 namespace Agnes\Model;
 
 use Agnes\Util\DBConnection;
+use Agnes\Util\TableName;
 
 class EventsModel extends AppModel
 {
@@ -181,6 +182,33 @@ class EventsModel extends AppModel
         return $this;
     }
 
+    public function update(array $data, $id)
+    {
+        $db = DBConnection::getInstance();
+        $table = TableName::getTableName(get_called_class());
+
+        $stmt = "UPDATE $table SET ";
+
+        $counter = 0;
+        foreach ($data as $key => $value)
+        {
+            if ($counter != 0)
+                $stmt .= ', ';
+
+            $stmt .= "$key = ".$db->quote($value);
+            $counter++;
+        }
+
+        $stmt .= " WHERE id = ".$db->quote($id);
+
+        $query = $db->query($stmt);
+
+        if ($query->rowCount() > 0)
+            return true;
+
+        return false;
+    }
+
     /**
      * @param \DateTime $start
      * @param \DateTime $end
@@ -238,7 +266,7 @@ class EventsModel extends AppModel
         $query->bindValue(':id_user',           $this->getIdUser(),         \PDO::PARAM_STR);
         $query->bindValue(':title',             $this->getTitle(),          \PDO::PARAM_STR);
         $query->bindValue(':description',       $this->getDescription(),    \PDO::PARAM_STR);
-        $query->bindValue(':start',             $this->getStart(),          \PDO::PARAM_INT);
+        $query->bindValue(':start',             $this->getStart(),          \PDO::PARAM_STR);
         $query->bindValue(':end',               $this->getEnd(),            \PDO::PARAM_STR);
 
         $query->execute();

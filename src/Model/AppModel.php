@@ -6,12 +6,15 @@ use Agnes\Util\TableName;
 
 class AppModel
 {
-    public static function findAll()
+    public static function findAll($order = '')
     {
         $db = DBConnection::getInstance();
         $table = TableName::getTableName(get_called_class());
 
         $stmt = "SELECT * FROM $table";
+        if (!empty(trim($order))) {
+            $stmt .= " ORDER BY $order";
+        }
         $query = $db->query($stmt);
 
         $data = $query->fetchAll(\PDO::FETCH_CLASS, static::class);

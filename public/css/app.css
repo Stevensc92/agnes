@@ -256,6 +256,11 @@
     color: green;
 }
 
+.addEvent {
+    display: block;
+    float: right;
+    margin: 15px;
+}
 
 /* ==================================================
   Animation

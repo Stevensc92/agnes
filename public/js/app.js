@@ -263,4 +263,10 @@ jQuery(function($){
 
     app.formSubmit();
     app.transformDiv();
+
+    // $('.input-append.date').datepicker({
+    //    clearBtn: true,
+    //    language: "fr",
+    //    todayHighlight: true
+    // });
 });

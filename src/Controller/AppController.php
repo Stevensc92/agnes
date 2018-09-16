@@ -4,6 +4,7 @@ namespace Agnes\Controller;
 
 use Agnes\Util\FlashMessage;
 use Agnes\Util\File;
+use Agnes\Util\InjectTwigFunction;
 use Agnes\Util\Slugify;
 
 class AppController
@@ -34,6 +35,57 @@ class AppController
             ));
         }
 
+        $this->injectTwigFunction();
+
+        @$this->session->flash = new FlashMessage();
+
+
+        if (isset($_SESSION['user']))
+        {
+            $this->twig->addGlobal('app', [
+                'user' => [
+                    'username'  => $_SESSION['user']['username'],
+                    'role'      => $_SESSION['user']['role'],
+                ],
+            ]);
+        }
+
+        if (isset($_SESSION['flashMessage']))
+        {
+            $this->twig->addGlobal('flashMessage', array(
+                'content'   => $_SESSION['flashMessage']['message'],
+                'type'      => $_SESSION['flashMessage']['type'],
+            ));
+            unset($_SESSION['flashMessage']);
+        }
+    }
+
+    public function notFound(): void
+    {
+        echo $this->twig->render('error/404.html.twig');
+    }
+
+    public function is_granted(string $role): bool
+    {
+        if (isset($_SESSION['user']) && isset($_SESSION['user']['role']))
+        {
+            if ($role === 'IS_AUTHENTICATED_FULLY')
+                return true;
+            else if ($role === $_SESSION['user']['role'])
+                return true;
+        }
+        return false;
+    }
+
+    public function is_ajax()
+    {
+        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
+            return true;
+        return false;
+    }
+
+    public function injectTwigFunction()
+    {
         /**
          * Create a TWIG function
          * Return the path to the public folder who contains the css,js and img folder.
@@ -115,12 +167,12 @@ class AppController
             return '.'.File::getExtension($filename);
         });
 
+
+        /** Function php into twig **/
         $str_replace = new \Twig_Function('str_replace', function($search, $replace, $subject) {
             $data = str_replace($search, $replace, $subject);
             return $data;
         });
-
-        /** Function php into twig **/
 
         $current = new \Twig_Function('current', function(&$arr) {
             return current($arr);
@@ -146,11 +198,11 @@ class AppController
         });
 
         $explode = new \Twig_Function('explode', function($delimiter, $string) {
-           return explode($delimiter, $string);
+            return explode($delimiter, $string);
         });
 
         $implode = new \Twig_Function('implode', function($glue, $arr) {
-           return implode($glue, $arr);
+            return implode($glue, $arr);
         });
 
         $this->twig->addFunction($asset);
@@ -168,51 +220,5 @@ class AppController
         $this->twig->addFunction($clone);
         $this->twig->addFunction($explode);
         $this->twig->addFunction($implode);
-
-        @$this->session->flash = new FlashMessage();
-
-
-        if (isset($_SESSION['user']))
-        {
-            $this->twig->addGlobal('app', [
-                'user' => [
-                    'username'  => $_SESSION['user']['username'],
-                    'role'      => $_SESSION['user']['role'],
-                ],
-            ]);
-        }
-
-        if (isset($_SESSION['flashMessage']))
-        {
-            $this->twig->addGlobal('flashMessage', array(
-                'content'   => $_SESSION['flashMessage']['message'],
-                'type'      => $_SESSION['flashMessage']['type'],
-            ));
-            unset($_SESSION['flashMessage']);
-        }
-    }
-
-    public function notFound(): void
-    {
-        echo $this->twig->render('error/404.html.twig');
-    }
-
-    public function is_granted(string $role): bool
-    {
-        if (isset($_SESSION['user']) && isset($_SESSION['user']['role']))
-        {
-            if ($role === 'IS_AUTHENTICATED_FULLY')
-                return true;
-            else if ($role === $_SESSION['user']['role'])
-                return true;
-        }
-        return false;
-    }
-
-    public function is_ajax()
-    {
-        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
-            return true;
-        return false;
     }
 }
