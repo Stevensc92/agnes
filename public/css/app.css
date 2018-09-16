@@ -243,9 +243,10 @@
 .mod
 {
     width: 250px;
-    border: 2px solid red;
-    border-radius: 10px;
+    border-left: 15px solid #42B97C;
+    background-color: beige;
     margin-bottom: 30px;
+    padding: 10px;
 }
 
 .mod .mod-title
