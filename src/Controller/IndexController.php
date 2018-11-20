@@ -10,7 +10,7 @@ class IndexController extends AppController
     /**
      * @Route('/', name="index")
      */
-    public function index(): void
+    public function index()
     {
         $pictures = new PictureModel;
 
@@ -20,7 +20,7 @@ class IndexController extends AppController
         ]);
     }
 
-    public function contact(): void
+    public function contact()
     {
         echo $this->twig->render('index/contact.html.twig');
     }

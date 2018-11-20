@@ -1,0 +1,42 @@
+<h1 class="title">{{ data.title }}</h1>
+
+<form method="{{ data.method }}" action="{{ path(data.action, {'id' : data.form.id}) }}" class="form-horizontal">
+    {% if data.form %}{% set form = data.form %}{% endif %}
+
+    {% if form %}
+        <div class="control-group">
+            <label for="id" class="control-label">ID</label>
+            <div class="controls">
+                <input type="text" name="idH" id="id" value="{{ form.id }}" disabled />
+                <input type="hidden" name="id" value="{{ form.id }}" />
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="control-group">
+        <label for="title" class="control-label">Titre</label>
+        <div class="controls">
+            <input type="text" name="title" id="title" value="{% if form %}{{ form.title }}{% endif %}" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="description" class="control-label">Description</label>
+        <div class="controls">
+            <textarea name="description" id="description" cols="60" rows="10">{% if form %}{{ form.description }}{% endif %}</textarea>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="price" class="control-label">Prix</label>
+        <div class="controls">
+            <input type="number" name="price" id="price" value="{% if form %}{{ form.price }}{% endif %}" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+            <button type="submit" name="{{ data.action }}" class="btn btn-primary">{{ data.actionText }}</button>
+        </div>
+    </div>
+</form>

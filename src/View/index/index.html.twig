@@ -31,9 +31,6 @@
                         {% for category in categories %}
                             <li><a href="#filter" data-option-value=".{{ category.name }}">{{ category.name }}</a></li>
                         {% endfor %}
-                        <!-- <li><a href="#filter" data-option-value=".design">Design</a></li>
-                        <li><a href="#filter" data-option-value=".photography">Photography</a></li>
-                        <li><a href="#filter" data-option-value=".video">Video</a></li> -->
                     </ul>
                 </nav>
                 <!-- End Filter -->
@@ -88,73 +85,54 @@
     <!-- People -->
     <div class="row">
 
+        <div class="span3"></div>
         <!-- Start Profile -->
-    	<div class="span4 profile">
+    	<div class="span6 profile">
         	<div class="image-wrap">
                 <div class="hover-wrap">
                     <span class="overlay-img"></span>
-                    <span class="overlay-text-thumb">CTO/Founder</span>
+                    <span class="overlay-text-thumb">Guide</span>
                 </div>
-                <img src="_include/img/profile/profile-01.jpg" alt="John Doe">
+                <img src="{{ asset('img/home/aly.png') }}" alt="Aly">
             </div>
-            <h3 class="profile-name">John Doe</h3>
-            <p class="profile-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac augue at erat <a href="#">hendrerit dictum</a>.
-            Praesent porta, purus eget sagittis imperdiet, nulla mi ullamcorper metus, id hendrerit metus diam vitae est. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+            <h3 class="profile-name">Aly</h3>
+            <p class="profile-description">
+                Je vis et habite à Saly, j'ai donc une connaissance de ma région et de mon pays.
+                Je parle le Wolof (ma langue maternelle), le français (pour vous servir) 🙏😃, un peu l'Anglais, l'Italien et l'Espagnol.<br>
+                Je suis "ouvert" à toutes discussions, bien entendu dans le respect de chacun.<br>
+                Je viens proposer mes services pour les visites que vous souhaiterez effectuer.<br>
+                Cela fait plus d'une vingtaine d'années que je vous "Guide" , et j'ai toujours autant de plaisir
+                à vous accompagner, vous conter, vous expliquer, et surtout vous faire découvrir "Mon PAYS"
+            </p>
 
             <div class="social">
             	<ul class="social-icons">
-                	<li><a href="#"><i class="font-icon-social-twitter"></i></a></li>
-                    <li><a href="#"><i class="font-icon-social-dribbble"></i></a></li>
-                    <li><a href="#"><i class="font-icon-social-facebook"></i></a></li>
+                    <li><a href="https://www.facebook.com/aly.niane.315" target="_blank"><i class="font-icon-social-facebook"></i></a></li>
                 </ul>
             </div>
         </div>
         <!-- End Profile -->
 
         <!-- Start Profile -->
-    	<div class="span4 profile">
-        	<div class="image-wrap">
-                <div class="hover-wrap">
-                    <span class="overlay-img"></span>
-                    <span class="overlay-text-thumb">Creative Director</span>
-                </div>
-                <img src="_include/img/profile/profile-02.jpg" alt="Jane Helf">
-            </div>
-            <h3 class="profile-name">Jane Helf</h3>
-            <p class="profile-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac augue at erat <a href="#">hendrerit dictum</a>.
-            Praesent porta, purus eget sagittis imperdiet, nulla mi ullamcorper metus, id hendrerit metus diam vitae est. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+    	{#<div class="span6 profile">#}
+        	{#<div class="image-wrap">#}
+                {#<div class="hover-wrap">#}
+                    {#<span class="overlay-img"></span>#}
+                    {#<span class="overlay-text-thumb">Creative Director</span>#}
+                {#</div>#}
+                {#<img src="_include/img/profile/profile-02.jpg" alt="Jane Helf">#}
+            {#</div>#}
+            {#<h3 class="profile-name">Jane Helf</h3>#}
+            {#<p class="profile-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac augue at erat <a href="#">hendrerit dictum</a>.#}
+            {#Praesent porta, purus eget sagittis imperdiet, nulla mi ullamcorper metus, id hendrerit metus diam vitae est. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>#}
 
-            <div class="social">
-            	<ul class="social-icons">
-                	<li><a href="#"><i class="font-icon-social-twitter"></i></a></li>
-                    <li><a href="#"><i class="font-icon-social-email"></i></a></li>
-                </ul>
-            </div>
-        </div>
-        <!-- End Profile -->
-
-        <!-- Start Profile -->
-    	<div class="span4 profile">
-        	<div class="image-wrap">
-                <div class="hover-wrap">
-                    <span class="overlay-img"></span>
-                    <span class="overlay-text-thumb">Lead Designer</span>
-                </div>
-                <img src="_include/img/profile/profile-03.jpg" alt="Joshua Insanus">
-            </div>
-            <h3 class="profile-name">Joshua Insanus</h3>
-            <p class="profile-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac augue at erat <a href="#">hendrerit dictum</a>.
-            Praesent porta, purus eget sagittis imperdiet, nulla mi ullamcorper metus, id hendrerit metus diam vitae est. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
-
-            <div class="social">
-            	<ul class="social-icons">
-                	<li><a href="#"><i class="font-icon-social-twitter"></i></a></li>
-                    <li><a href="#"><i class="font-icon-social-linkedin"></i></a></li>
-                    <li><a href="#"><i class="font-icon-social-google-plus"></i></a></li>
-                    <li><a href="#"><i class="font-icon-social-vimeo"></i></a></li>
-                </ul>
-            </div>
-        </div>
+            {#<div class="social">#}
+            	{#<ul class="social-icons">#}
+                	{#<li><a href="#"><i class="font-icon-social-twitter"></i></a></li>#}
+                    {#<li><a href="#"><i class="font-icon-social-email"></i></a></li>#}
+                {#</ul>#}
+            {#</div>#}
+        {#</div>#}
         <!-- End Profile -->
 
     </div>
@@ -162,5 +140,71 @@
 </div>
 </div>
 <!-- End About Section -->
+
+<div id="excursions" class="page">
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <!-- Start Accordion -->
+                <div class="accordion" id="accordionArea">
+                    <div class="accordion-group">
+                        <div class="accordion-heading accordionize">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionArea" href="#oneArea">
+                                Design
+                                <span class="font-icon-arrow-simple-down"></span>
+                            </a>
+                        </div>
+                        <div id="oneArea" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                Donec sed odio dui. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+                                Sed posuere consectetur est at lobortis. Nulla vitae elit libero, a pharetra augue. Donec ullamcorper nulla non metus auctor fringilla.
+                                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet. Donec sed odio dui.
+                                Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Sed posuere consectetur est at lobortis. Nulla vitae elit libero, a pharetra augue.
+                                Donec ullamcorper nulla non metus auctor fringilla. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-group">
+                        <div class="accordion-heading accordionize">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionArea" href="#twoArea">
+                                Development
+                                <span class="font-icon-arrow-simple-down">blabla</span>
+                            </a>
+                        </div>
+                        <div id="twoArea" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                Donec sed odio dui. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+                                Sed posuere consectetur est at lobortis. Nulla vitae elit libero, a pharetra augue. Donec ullamcorper nulla non metus auctor fringilla.
+                                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet. Donec sed odio dui.
+                                Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Sed posuere consectetur est at lobortis. Nulla vitae elit libero, a pharetra augue.
+                                Donec ullamcorper nulla non metus auctor fringilla. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-group">
+                        <div class="accordion-heading accordionize">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionArea" href="#threeArea">
+                                UX/UI
+                                <span class="font-icon-arrow-simple-down"></span>
+                            </a>
+                        </div>
+                        <div id="threeArea" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                Donec sed odio dui. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+                                Sed posuere consectetur est at lobortis. Nulla vitae elit libero, a pharetra augue. Donec ullamcorper nulla non metus auctor fringilla.
+                                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet. Donec sed odio dui.
+                                Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Sed posuere consectetur est at lobortis. Nulla vitae elit libero, a pharetra augue.
+                                Donec ullamcorper nulla non metus auctor fringilla. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Accordion -->
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

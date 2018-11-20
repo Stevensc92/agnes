@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% set slider = true %}
+
+{% block body %}
+    <div id="focus" class="page">
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    <div class="title-page">
+                        <h2 class="title">Excursions</h2>
+                        <h3 class="title-description">Liste des excursions</h3>
+                    </div>
+
+                    <div class="pull-right">
+                        <a href="{{ path('addExcursion') }}" class="btn btn-primary">Ajouter une excursion</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                {% if excursions is not empty %}
+                    <div >
+                        {% for excursion in excursions %}
+                            {% if excursion.description is empty %}
+                                {% set description = 'Aucune description' %}
+                            {% else %}
+                                {% set description = excursion.description %}
+                            {% endif %}
+
+
+                            <div class="span12 picture" data-id="{{ excursion.id }}">
+                                <div class="row">
+                                    <img class="span3 img-responsive {{ class }}" src="{{ asset('uploads/') ~ picture.filename ~ picture.extension }}" alt="{{ picture.description }}" />
+                                    <span class="span3" data-type="text" data-name="filename" data-default="{{ picture.filename }}">{{ picture.filename }}</span>
+                                    <span class="span3" data-type="textarea" data-name="description" data-default="{{ description }}">{{ description }}</span>
+                                    <span class="span3 hidden">
+                                    <i class="fa fa-check"></i>
+                                    <i class="fa fa-undo"></i>
+                                    <i class="far fa-trash-alt"></i>
+                                </span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>Aucune excursions créées</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

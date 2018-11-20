@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% set slider = true %}
+
+{% block body %}
+    <div class="page" id="focus">
+        <div class="container">
+            {% set data = {
+                'title'         : 'Modifier une Excursion',
+                'method'        : 'post',
+                'action'        : 'editExcursion',
+                'actionText'    : 'Modifier',
+                'form'          : excursion
+            } %}
+            {% include 'admin/excursions/form.html.twig' with data %}
+        </div>
+    </div>
+{% endblock %}

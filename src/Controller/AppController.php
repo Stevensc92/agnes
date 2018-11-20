@@ -2,10 +2,7 @@
 
 namespace Agnes\Controller;
 
-use Agnes\Util\FlashMessage;
-use Agnes\Util\File;
-use Agnes\Util\InjectTwigFunction;
-use Agnes\Util\Slugify;
+use Agnes\Util\{FlashMessage, File, Slugify};
 
 class AppController
 {

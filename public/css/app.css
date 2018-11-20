@@ -165,6 +165,22 @@
     text-align: center;
 }
 
+.description-image
+{
+    height: auto;
+    background-color: #fff;
+    text-align: center;
+}
+
+.image
+{
+    background-color: #fff;
+}
+
+.show-image, .description-image
+{
+}
+
 /* ==================================================
   Calendar Style
 ================================================== */
