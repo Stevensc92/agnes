@@ -357,7 +357,7 @@ class BackOfficeController extends AppController
 
             $item = new EventsModel();
             if ($item->update($data, $_POST['id'])) {
-                $this->session->flash->setFlashMessage('L\évènement à bien été modifié', 'success');
+                $this->session->flash->setFlashMessage('L\évènement a bien été modifié', 'success');
             } else {
                 $this->session->flash->setFlashMessage('L\'évènement n\'a pas été modifié', 'warning');
             }
@@ -383,7 +383,7 @@ class BackOfficeController extends AppController
         if (EventsModel::deleteById($param['id'])) {
             $this->session->flash->setFlashMessage('L\'évènement a bien été supprimé.', 'success');
         } else {
-            $this->session->flash->setFlashMessage('L\'évènement n\'a été supprimé.');
+            $this->session->flash->setFlashMessage('L\'évènement n\'a pas été supprimé.');
         }
 
         $this->router->redirectToRoute('listEvents');

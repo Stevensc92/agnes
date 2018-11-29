@@ -16,7 +16,7 @@
     text-align: center;
     position: fixed;
     z-index: 9999;
-    width: 100%
+    width: 100%;
 }
 
 #flash p.content
@@ -277,6 +277,44 @@
     display: block;
     float: right;
     margin: 15px;
+}
+
+
+/* ==================================================
+  Excursions
+================================================== */
+
+/*!* prepare wrapper element *!*/
+div.input-suffix {
+    display: inline-block;
+    position: relative;
+}
+
+/* position the unit to the right of the wrapper */
+div.input-suffix::after {
+    position: absolute;
+    top: 2px;
+    right: 1.8em;
+    transition: all .05s ease-in-out;
+}
+
+/* move unit more to the left on hover
+   for arrow buttons will appear to the right of number inputs */
+
+
+/* set the unit abbreviation for each unit class */
+.euro::after {
+    content: '€';
+}
+
+.excursion-title {
+    color: white!important;
+}
+
+.excursion-price {
+    display: inline;
+    float: right;
+    margin-right: 30px;
 }
 
 /* ==================================================

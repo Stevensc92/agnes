@@ -4,6 +4,8 @@ namespace Agnes\Model;
 use Agnes\Util\DBConnection;
 use Agnes\Util\TableName;
 
+
+
 class AppModel
 {
     public static function findAll($order = '')

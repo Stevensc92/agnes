@@ -11,7 +11,7 @@ class PictureController extends AppController
      * @Route('/picture/[i:id]', name="showPicture")
      * @Method('GET')
      */
-    public function showPicture(array $params): void
+    public function showPicture(array $params)
     {
         if (!array_key_exists('id', $params)) {
             die($this->notFound());
@@ -34,7 +34,7 @@ class PictureController extends AppController
      * @Route('/picture/[a:category']', name="showCategory")
      * @Method('GET')
      */
-    public function showCategory(array $params): void
+    public function showCategory(array $params)
     {
         if (!array_key_exists('category', $params)) {
             die($this->notFound());

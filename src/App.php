@@ -60,6 +60,8 @@ class App
              */
             $this->router->map('GET', '/admin/excursions', 'ExcursionsController#list', 'listExcursions');
             $this->router->map('GET|POST',  '/admin/excursions/add', 'ExcursionsController#add', 'addExcursion');
+            $this->router->map('GET|POST',  '/admin/excursions/update/[i:id]', 'ExcursionsController#edit', 'editExcursion');
+            $this->router->map('GET|POST',  '/admin/excursions/delete/[i:id]', 'ExcursionsController#delete', 'deleteExcursion');
 
         /**
          * Ajax routes

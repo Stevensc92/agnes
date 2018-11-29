@@ -50,19 +50,19 @@ class AppController
         if (isset($_SESSION['flashMessage']))
         {
             $this->twig->addGlobal('flashMessage', array(
-                'content'   => $_SESSION['flashMessage']['message'],
+                'content'   => strip_tags($_SESSION['flashMessage']['message'], '<br>'),
                 'type'      => $_SESSION['flashMessage']['type'],
             ));
             unset($_SESSION['flashMessage']);
         }
     }
 
-    public function notFound(): void
+    public function notFound()
     {
         echo $this->twig->render('error/404.html.twig');
     }
 
-    public function is_granted(string $role): bool
+    public function is_granted(string $role)
     {
         if (isset($_SESSION['user']) && isset($_SESSION['user']['role']))
         {
@@ -217,5 +217,14 @@ class AppController
         $this->twig->addFunction($clone);
         $this->twig->addFunction($explode);
         $this->twig->addFunction($implode);
+    }
+
+    public function dump($var, $die = false)
+    {
+        echo '<pre>';
+        var_dump($var);
+        echo '</pre>';
+
+        if($die) die();
     }
 }

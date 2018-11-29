@@ -3,6 +3,7 @@
 namespace Agnes\Controller;
 
 use Agnes\Model\CategoryModel;
+use Agnes\Model\ExcursionsModel;
 use Agnes\Model\PictureModel;
 
 class IndexController extends AppController
@@ -17,6 +18,7 @@ class IndexController extends AppController
         echo $this->twig->render('index/index.html.twig', [
             'categories'    => CategoryModel::findAll(),
             'pictures'      => PictureModel::findAllWithCategory(),
+            'excursions'    => ExcursionsModel::findAll(),
         ]);
     }
 

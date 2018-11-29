@@ -7,7 +7,7 @@ use Agnes\Util\TableName;
 class ExcursionsModel extends AppModel
 {
     private $id;
-    private $name;
+    private $title;
     private $price;
     private $description;
 
@@ -36,12 +36,12 @@ class ExcursionsModel extends AppModel
     }
 
     /**
-     * @param $name
+     * @param $title
      * @return $this
      */
-    public function setName($name)
+    public function setTitle($title)
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -49,9 +49,9 @@ class ExcursionsModel extends AppModel
     /**
      * @return string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
     }
 
     /**
@@ -90,6 +90,58 @@ class ExcursionsModel extends AppModel
     public function getDescription()
     {
         return $this->description;
+    }
+
+    public function add(): bool
+    {
+        $db = DBConnection::getInstance();
+
+        $stmt = "
+            INSERT INTO excursions(`title`, `price`, `description`)
+            VALUES(:title, :price, :description)
+        ";
+        $query = $db->prepare($stmt);
+        $query->bindValue(':title',             $this->getTitle(),          \PDO::PARAM_STR);
+        $query->bindValue(':price',             $this->getPrice(),          \PDO::PARAM_STR);
+        $query->bindValue(':description',       $this->getDescription(),    \PDO::PARAM_STR);
+
+//        var_dump($stmt);
+//        die();
+
+        $query->execute();
+
+        if ($query)
+            return true;
+
+        return false;
+    }
+
+    public function update(array $data, $id)
+    {
+        $db = DBConnection::getInstance();
+        $table = TableName::getTableName(get_called_class());
+
+        $stmt = "UPDATE $table SET ";
+
+        $counter = 0;
+        foreach ($data as $key => $value)
+        {
+            if ($counter != 0)
+                $stmt .= ', ';
+
+            $stmt .= "$key = ".$db->quote($value);
+            $counter++;
+        }
+
+        $stmt .= " WHERE id = ".$db->quote($id);
+
+        // print_r($stmt);
+        $query = $db->query($stmt);
+
+        if ($query->rowCount() > 0)
+            return true;
+
+        return false;
     }
 }
 ?>
