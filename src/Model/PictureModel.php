@@ -215,7 +215,7 @@ class PictureModel extends AppModel
         return false;
     }
 
-    public static function findAll()
+    public static function findAll($order = '')
     {
         $db = DBConnection::getInstance();
 
@@ -228,6 +228,9 @@ class PictureModel extends AppModel
                     p.width,
                     p.height
                 FROM picture p";
+
+        if (!empty(trim($order)))
+            $stmt .= " ORDER BY $order";
 
         $query = $db->query($stmt);
 

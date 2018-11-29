@@ -4,14 +4,19 @@ namespace Agnes\Model;
 use Agnes\Util\DBConnection;
 use Agnes\Util\TableName;
 
+
+
 class AppModel
 {
-    public static function findAll()
+    public static function findAll($order = '')
     {
         $db = DBConnection::getInstance();
         $table = TableName::getTableName(get_called_class());
 
         $stmt = "SELECT * FROM $table";
+        if (!empty(trim($order))) {
+            $stmt .= " ORDER BY $order";
+        }
         $query = $db->query($stmt);
 
         $data = $query->fetchAll(\PDO::FETCH_CLASS, static::class);
@@ -67,10 +72,10 @@ class AppModel
         $query = $db->prepare($stmt);
         $query->bindValue(':id', $id, \PDO::PARAM_INT);
 
-        if ($query->execute() > 0)
-            return true;
+        if ($query->execute() == 0)
+            return false;
 
-        return false;
+        return true;
 
     }
 

@@ -2,9 +2,7 @@
 
 namespace Agnes\Controller;
 
-use Agnes\Util\FlashMessage;
-use Agnes\Util\File;
-use Agnes\Util\Slugify;
+use Agnes\Util\{FlashMessage, File, Slugify};
 
 class AppController
 {
@@ -24,16 +22,67 @@ class AppController
         if(preg_match('#localhost#', $_SERVER['HTTP_HOST']))
         {
             $this->twig = new \Twig_Environment($loader, array(
-                //'cache' => 'compilation_cache',
+                'cache' => false,
             ));
         }
         else
         {
             $this->twig = new \Twig_Environment($loader, array(
-                'cache' => 'compilation_cache',
+                'cache' => false,
             ));
         }
 
+        $this->injectTwigFunction();
+
+        @$this->session->flash = new FlashMessage();
+
+
+        if (isset($_SESSION['user']))
+        {
+            $this->twig->addGlobal('app', [
+                'user' => [
+                    'username'  => $_SESSION['user']['username'],
+                    'role'      => $_SESSION['user']['role'],
+                ],
+            ]);
+        }
+
+        if (isset($_SESSION['flashMessage']))
+        {
+            $this->twig->addGlobal('flashMessage', array(
+                'content'   => strip_tags($_SESSION['flashMessage']['message'], '<br>'),
+                'type'      => $_SESSION['flashMessage']['type'],
+            ));
+            unset($_SESSION['flashMessage']);
+        }
+    }
+
+    public function notFound()
+    {
+        echo $this->twig->render('error/404.html.twig');
+    }
+
+    public function is_granted(string $role)
+    {
+        if (isset($_SESSION['user']) && isset($_SESSION['user']['role']))
+        {
+            if ($role === 'IS_AUTHENTICATED_FULLY')
+                return true;
+            else if ($role === $_SESSION['user']['role'])
+                return true;
+        }
+        return false;
+    }
+
+    public function is_ajax()
+    {
+        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
+            return true;
+        return false;
+    }
+
+    public function injectTwigFunction()
+    {
         /**
          * Create a TWIG function
          * Return the path to the public folder who contains the css,js and img folder.
@@ -67,7 +116,7 @@ class AppController
                 $url = $this->router->generate($routeName);
             }
 
-            if ($this->basePath == 'agnes2/') {
+            if ($this->basePath == 'agnes/') {
                 $toSearch = $this->basePath.'/';
                 $isSlasher = strpos($url, $toSearch);
                 if ($isSlasher == 0)
@@ -93,7 +142,7 @@ class AppController
          * @param array|string var
          * @return void
          */
-        $dump = new \Twig_Function('dump', function(...$var) {
+        $dump = new \Twig_Function('dump', function($var) {
             return var_dump($var);
         });
 
@@ -115,12 +164,12 @@ class AppController
             return '.'.File::getExtension($filename);
         });
 
+
+        /** Function php into twig **/
         $str_replace = new \Twig_Function('str_replace', function($search, $replace, $subject) {
             $data = str_replace($search, $replace, $subject);
             return $data;
         });
-
-        /** Function php into twig **/
 
         $current = new \Twig_Function('current', function(&$arr) {
             return current($arr);
@@ -145,6 +194,14 @@ class AppController
             return clone($var);
         });
 
+        $explode = new \Twig_Function('explode', function($delimiter, $string) {
+            return explode($delimiter, $string);
+        });
+
+        $implode = new \Twig_Function('implode', function($glue, $arr) {
+            return implode($glue, $arr);
+        });
+
         $this->twig->addFunction($asset);
         $this->twig->addFunction($path);
         $this->twig->addFunction($is_granted);
@@ -158,51 +215,16 @@ class AppController
         $this->twig->addFunction($end);
         $this->twig->addFunction($strtotime);
         $this->twig->addFunction($clone);
-
-        @$this->session->flash = new FlashMessage();
-
-
-        if (isset($_SESSION['user']))
-        {
-            $this->twig->addGlobal('app', [
-                'user' => [
-                    'username'  => $_SESSION['user']['username'],
-                    'role'      => $_SESSION['user']['role'],
-                ],
-            ]);
-        }
-
-        if (isset($_SESSION['flashMessage']))
-        {
-            $this->twig->addGlobal('flashMessage', array(
-                'content'   => $_SESSION['flashMessage']['message'],
-                'type'      => $_SESSION['flashMessage']['type'],
-            ));
-            unset($_SESSION['flashMessage']);
-        }
+        $this->twig->addFunction($explode);
+        $this->twig->addFunction($implode);
     }
 
-    public function notFound(): void
+    public function dump($var, $die = false)
     {
-        echo $this->twig->render('error/404.html.twig');
-    }
+        echo '<pre>';
+        var_dump($var);
+        echo '</pre>';
 
-    public function is_granted(string $role): bool
-    {
-        if (isset($_SESSION['user']) && isset($_SESSION['user']['role']))
-        {
-            if ($role === 'IS_AUTHENTICATED_FULLY')
-                return true;
-            else if ($role === $_SESSION['user']['role'])
-                return true;
-        }
-        return false;
-    }
-
-    public function is_ajax()
-    {
-        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
-            return true;
-        return false;
+        if($die) die();
     }
 }

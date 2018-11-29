@@ -47,13 +47,30 @@ class App
              $this->router->map('POST', '/admin/picture/upload',    'BackOfficeController#uploadPicture',   'uploadPicture');
              $this->router->map('GET',  '/admin/picture',           'BackOfficeController#listPicture',     'listPicture');
 
+            /**
+             * Events routes
+             */
+        $this->router->map('GET',       '/admin/events',              'BackOfficeController#listEvents',      'listEvents');
+        $this->router->map('GET|POST',  '/admin/events/update/[i:id]','BackOfficeController#editEvent',       'editEvent');
+        $this->router->map('GET',       '/admin/events/delete/[i:id]','BackOfficeController#deleteEvent',     'deleteEvent');
+        $this->router->map('GET|POST',  '/admin/events/add',          'BackOfficeController#addEvent',        'addEvent');
+
+            /**
+             * Excursions routes
+             */
+            $this->router->map('GET', '/admin/excursions', 'ExcursionsController#list', 'listExcursions');
+            $this->router->map('GET|POST',  '/admin/excursions/add', 'ExcursionsController#add', 'addExcursion');
+            $this->router->map('GET|POST',  '/admin/excursions/update/[i:id]', 'ExcursionsController#edit', 'editExcursion');
+            $this->router->map('GET|POST',  '/admin/excursions/delete/[i:id]', 'ExcursionsController#delete', 'deleteExcursion');
+
         /**
          * Ajax routes
          */
         $this->router->map('POST', '/admin/picture/update', 'BackOfficeController#updatePicture',   'updatePicture');
         $this->router->map('POST', '/admin/picture/delete', 'BackOfficeController#deletePicture',   'deletePicture');
-        $this->router->map('POST', '/ajax/getcomment',      'AjaxController#getComment',               'getComment');
-        $this->router->map('POST', '/ajax/addcomment',      'AjaxController#addComment',               'addComment');
+        $this->router->map('POST', '/ajax/getcomment',      'AjaxController#getComment',            'getComment');
+        $this->router->map('POST', '/ajax/addcomment',      'AjaxController#addComment',            'addComment');
+        $this->router->map('POST', '/ajax/reservation',     'AjaxController#putReservation',        'putReservation');
 
         DBConnection::setConfig(Config::getConfig());
     }

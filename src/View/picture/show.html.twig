@@ -4,199 +4,212 @@
 
 {% block body %}
 
-<div id="focus" class="page">
-  <div class="container">
-    <div class="row">
-      <div class="span6">
-        <h1>Catégorie</h1>
-        <a href="{{ path('showCategory', {'category': slugify(picture.category_name)}) }}">{{ picture.category_name }}</a>
-        <h1>Commentaire</h1>
-        {% if comments is not empty %}
-          <div id="pagination"></div>
-          <div class="comment-list">
-            {% for comment in comments %}
-              <div class="comment">
-                <blockquote>
-                  <small>Par {{ comment.username }} Le {{ comment.createdAt }}</small>
-                  <p>
-                    {{ displayVar(comment.content) }}
-                  </p>
-                </blockquote>
-              </div>
-            {% endfor %}
-          </div>
-        {% else %}
-          <p>Aucun commentaire</p>
-        {% endif %}
+    <div id="focus" class="page">
+        <div class="container">
+            <div class="row">
+                <div class="span6">
+                    <h1>Catégorie</h1>
+                    <a href="{{ path('showCategory', {'category': slugify(picture.category_name)}) }}">{{ picture.category_name }}</a>
+                    <h1 id="title-comment">Commentaire</h1>
+                        <div id="pagination"></div>
+                        <div class="comment-list">
+                            {% if comments is not empty %}
+                            {% for comment in comments %}
+                                <div class="comment">
+                                    <blockquote>
+                                        <small>Par {{ comment.username }} Le {{ comment.createdAt }}</small>
+                                        <p>
+                                            {{ displayVar(comment.content) }}
+                                        </p>
+                                    </blockquote>
+                                </div>
+                            {% endfor %}
+                            {% else %}
+                                <p>Aucun commentaire</p>
+                            {% endif %}
+                        </div>
 
-        {% if app.user.username is not empty %}
-          {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-            <div id="response"></div>
-            <form method="post" class="form">
-                <p>
-                  <textarea id="com_content" placeholder="Votre message" name="comment_content"></textarea>
-                </p>
-                <p>
-                  <a id="send-comment" class="submit" href="#">Envoyer le commentaire</a>
-                </p>
-            </form>
-          {% endif %}
-        {% endif %}
-      </div>
-      <div class="span6">
-        <div class="show-image">
-          <img src="{{ asset('uploads/' ~ picture.filename ~ picture.extension )}}" />
+                    {% if app.user.username is not empty %}
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <div id="response"></div>
+                            <form method="post" class="form">
+                                <p>
+                                    <textarea id="com_content" placeholder="Votre message" name="comment_content"></textarea>
+                                </p>
+                                <p>
+                                    <a id="send-comment" class="submit" href="#">Envoyer le commentaire</a>
+                                </p>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="span6 image">
+                    <div class="show-image">
+                        <img src="{{ asset('uploads/' ~ picture.filename ~ picture.extension )}}" />
+                    </div>
+                    <div class="description-image">
+                        {{ picture.description }}
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-</div>
 
 {% endblock %}
 
 {% block javascripts %}
-<script type="text/javascript">
-jQuery(function($){
-  function escapeHtml(unsafe) {
-    return unsafe
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-  }
+    <script type="text/javascript">
+        jQuery(function($){
+            function escapeHtml(unsafe) {
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
 
-  var nbComments = {{ nbComments }};
-  var idPicture = {{ picture.id }};
-  var commentPerPage = 5;
+            var nbComments = {{ nbComments }};
+            var idPicture = {{ picture.id }};
+            var commentPerPage = 5;
 
-  var $commentDiv = $('.comment-list');
+            var $commentDiv = $('.comment-list');
 
-  var nbPage = Math.ceil(nbComments / commentPerPage);
+            var nbPage = Math.ceil(nbComments / commentPerPage);
 
-  {% if app.user.username is not empty %}
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-      $('#send-comment').on('click', function() {
-        var username = '{{ app.user.username }}';
-        var com_content = $('#com_content').val();
-        var responseDiv = $('#response');
-        var minMessage = 5;
+            {% if app.user.username is not empty %}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            $('#send-comment').on('click', function() {
+                var username = '{{ app.user.username }}';
+                var com_content = $('#com_content').val();
+                var responseDiv = $('#response');
+                var minMessage = 5;
 
-        if (com_content.length > minMessage) {
-          $.post(
-            '/agnes2/ajax/addcomment',
-            {
-              id_picture: idPicture,
-              username: username,
-              com_content: com_content,
-            },
-            function (data) {
-              $('#com_content').val('');
+                if (com_content.length > minMessage) {
+                    $.post(
+                        '/agnes/ajax/addcomment',
+                        {
+                            id_picture: idPicture,
+                            username: username,
+                            com_content: com_content,
+                        },
+                        function (data) {
+                            $('#com_content').val('');
 
-              var commentHtml = '';
+                            var commentHtml = '';
 
-              for (var i = 0; i < data.length; i++) {
-                var com_username = data[i].com_username;
-                var com_createdAt = data[i].com_createdAt;
-                var com_content = data[i].com_content;
+                            for (var i = 0; i < data.length; i++) {
+                                var com_username = data[i].com_username;
+                                var com_createdAt = data[i].com_createdAt;
+                                var com_content = data[i].com_content;
 
-                commentHtml += '<div class="comment">'+
-                '<blockquote>'+
-                '<small>Par '+com_username+' Le '+com_createdAt+'</small>'+
-                '<p>'+com_content+'</p>'+
-                '</blockquote>'+
-                '</div>';
-              }
+                                commentHtml += '<div class="comment">'+
+                                    '<blockquote>'+
+                                    '<small>Par '+com_username+' Le '+com_createdAt+'</small>'+
+                                    '<p>'+com_content+'</p>'+
+                                    '</blockquote>'+
+                                    '</div>';
+                            }
 
-              $commentDiv.animate({
-                'opacity': 0
-              }, 500, function() {
-                $commentDiv.html(commentHtml).animate({
-                  'opacity': 1
-                });
-              });
+                            if ($commentDiv.length === 0) {
+                                var $title = $('#title-comment');
 
-              responseDiv.empty();
-            },
-            'json'
-          );
-        } else {
-          responseDiv.empty().html('<div class="alert alert-error fade in" style="margin-bottom:10px!important;">Le commentaire doit etre d\'au moins '+minMessage+' caractères</div>');
-        }
-        return false;
-      });
-    {% endif %}
-  {% endif %}
+                                $title.next().animate({
+                                    'opacity': 0
+                                }, 500, function() {
+                                    $title.next().remove();
+                                });
+                            }
 
-  if (nbPage > 1) {
-    var currentPage = 1;
-    var pagination = $('#pagination');
-    var html = '';
+                            $commentDiv.animate({
+                                'opacity': 0
+                            }, 500, function() {
+                                $commentDiv.html(commentHtml).animate({
+                                    'opacity': 1
+                                });
+                            });
 
-    for (var i = 1; i <= nbPage; i++) {
-      if (i == currentPage) {
-        html += '<button class="button button-mini page active">'+i+'</button>';
-      } else {
-        html += '<button class="button button-mini page">'+i+'</button>';
-      }
-    }
-
-    pagination.html(html)
-
-    $('.button.page').on('click', function() {
-      if ($(this).hasClass('active')) {
-        return false;
-      }
-
-      currentPage = $(this).html();
-      var page;
-      // if (currentPage > 1) {
-      //     page = currentPage;
-      // } else {
-      //     page = 0;
-      // }
-
-      var first_com = ((currentPage - 1) * commentPerPage);
-
-      $.post(
-        '/agnes2/ajax/getcomment',
-        {
-          id_picture: idPicture,
-          commentPerPage: commentPerPage,
-          first_com: first_com
-        },
-        function(data) {
-          var commentHtml = '';
-
-          for (var i = 0; i < data.length; i++) {
-            var com_username = data[i].com_username;
-            var com_createdAt = data[i].com_createdAt;
-            var com_content = escapeHtml(data[i].com_content);
-
-            commentHtml += '<div class="comment">'+
-            '<blockquote>'+
-            '<small>Par '+com_username+' Le '+com_createdAt+'</small>'+
-            '<p>'+com_content+'</p>'+
-            '</blockquote>'+
-            '</div>';
-          }
-
-          $commentDiv.animate({
-            'opacity': 0
-          }, 500, function() {
-            $commentDiv.html(commentHtml).animate({
-              'opacity': 1
+                            responseDiv.empty();
+                        },
+                        'json'
+                    );
+                } else {
+                    responseDiv.empty().html('<div class="alert alert-error fade in" style="margin-bottom:10px!important;">Le commentaire doit etre d\'au moins '+minMessage+' caractères</div>');
+                }
+                return false;
             });
-          });
-        },
-        'json'
-      );
-      // console.log('click', $(this).html());
-      $(this).parent().find('.active').removeClass('active');
-    });
+            {% endif %}
+            {% endif %}
 
-  }
-  // console.log(nbPage);
-});
-</script>
+            if (nbPage > 1) {
+                var currentPage = 1;
+                var pagination = $('#pagination');
+                var html = '';
+
+                for (var i = 1; i <= nbPage; i++) {
+                    if (i == currentPage) {
+                        html += '<button class="button button-mini page active">'+i+'</button>';
+                    } else {
+                        html += '<button class="button button-mini page">'+i+'</button>';
+                    }
+                }
+
+                pagination.html(html)
+
+                $('.button.page').on('click', function() {
+                    if ($(this).hasClass('active')) {
+                        return false;
+                    }
+
+                    currentPage = $(this).html();
+                    var page;
+                    // if (currentPage > 1) {
+                    //     page = currentPage;
+                    // } else {
+                    //     page = 0;
+                    // }
+
+                    var first_com = ((currentPage - 1) * commentPerPage);
+
+                    $.post(
+                        '/agnes/ajax/getcomment',
+                        {
+                            id_picture: idPicture,
+                            commentPerPage: commentPerPage,
+                            first_com: first_com
+                        },
+                        function(data) {
+                            var commentHtml = '';
+
+                            for (var i = 0; i < data.length; i++) {
+                                var com_username = data[i].com_username;
+                                var com_createdAt = data[i].com_createdAt;
+                                var com_content = escapeHtml(data[i].com_content);
+
+                                commentHtml += '<div class="comment">'+
+                                    '<blockquote>'+
+                                    '<small>Par '+com_username+' Le '+com_createdAt+'</small>'+
+                                    '<p>'+com_content+'</p>'+
+                                    '</blockquote>'+
+                                    '</div>';
+                            }
+
+                            $commentDiv.animate({
+                                'opacity': 0
+                            }, 500, function() {
+                                $commentDiv.html(commentHtml).animate({
+                                    'opacity': 1
+                                });
+                            });
+                        },
+                        'json'
+                    );
+                    // console.log('click', $(this).html());
+                    $(this).parent().find('.active').removeClass('active');
+                });
+
+            }
+            // console.log(nbPage);
+        });
+    </script>
 {% endblock %}

@@ -1,6 +1,8 @@
 <?php
 session_start();
 date_default_timezone_set('Europe/Paris');
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 require_once 'vendor/autoload.php';
 
@@ -12,9 +14,9 @@ function is_ajax()
 }
 
 if (preg_match('#localhost#', $_SERVER['HTTP_HOST'])) {
-    define('BASEPATH', 'agnes2/');
+    define('BASEPATH', 'agnes/');
 } else {
-    define('BASEPATH', '');
+    define('BASEPATH', '/');
 }
 
 $app = new \Agnes\App;

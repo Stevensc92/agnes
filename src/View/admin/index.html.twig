@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% set slider = true %}
+
+{% block body %}
+<div class="page" id="focus">
+	<div class="container">
+		<div class="span12">
+			<h2>Administration</h1>
+		</div>
+
+		<div id="modules" class="span12">
+			<div class="mod">
+				<span class="mod-title">Images</span>
+				<ul>
+					<li><a href="{{ path('listPicture') }}">Gérer des images</a></li>
+					<li><a href="{{ path('addPicture') }}">Uploader des images</a></li>
+				</ul>
+			</div>
+
+			<div class="mod">
+				<span class="mod-title">Évènements</span>
+				<ul>
+					<li><a href="{{ path('listEvents') }}">Gérer les évènements</a></li>
+				</ul>
+			</div>
+
+			<div class="mod">
+				<span class="mod-title">Excursions</span>
+				<ul>
+					<li><a href="{{ path('listExcursions') }}">Gérer les excursions</a></li>
+					<li><a href="{{ path('addExcursion') }}">Ajouter une excursion</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}{% endblock %}

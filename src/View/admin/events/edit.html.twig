@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% set slider = true %}
+
+{% block body %}
+<div class="page" id="focus">
+    <div class="container">
+        {% set data = {
+            'method'        : 'post',
+            'action'        : 'editEvent',
+            'actionText'    : 'Modifier',
+            'form'          : event
+        } %}
+        {% include 'admin/events/form.html.twig' with data %}
+    </div>
+</div>
+{% endblock %}

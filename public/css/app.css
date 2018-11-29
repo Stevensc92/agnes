@@ -16,7 +16,7 @@
     text-align: center;
     position: fixed;
     z-index: 9999;
-    width: 100%
+    width: 100%;
 }
 
 #flash p.content
@@ -37,6 +37,62 @@
 #upload-form .submit
 {
     border-style: none;
+}
+
+#form-reservation
+{
+    width: 95%;
+}
+
+.reservation input
+{
+    width: 95%;
+}
+
+.reservation textarea
+{
+    width: 95%;
+    height: 120px;
+
+    max-width: 95%;
+    max-height: 500px;
+}
+
+.reservation button
+{
+    width: 40%;
+}
+
+.button-flex
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.input-text-error
+{
+    color: red;
+    font-size: 18px;
+    margin-top: -10px;
+}
+
+.input-error
+{
+    border: 3px red solid !important;
+}
+
+.form-success
+{
+    color: green;
+    font-size: 18px;
+}
+
+.form-error
+{
+    color: red;
+    font-size: 18px;
 }
 
 /* ==================================================
@@ -109,6 +165,22 @@
     text-align: center;
 }
 
+.description-image
+{
+    height: auto;
+    background-color: #fff;
+    text-align: center;
+}
+
+.image
+{
+    background-color: #fff;
+}
+
+.show-image, .description-image
+{
+}
+
 /* ==================================================
   Calendar Style
 ================================================== */
@@ -153,6 +225,18 @@
     opacity: 0.3;
 }
 
+.calendar__event::before {
+    content:"• ";
+}
+
+/* ==================================================
+  Calendar reservation Style
+================================================== */
+.current-date {
+    font-size: 22px;
+    margin-bottom: 32px;
+}
+
 /* ==================================================
   Pagination Style
 ================================================== */
@@ -162,7 +246,76 @@
     color: #FFF;
 }
 
+/* ==================================================
+  Administration Style
+================================================== */
+#modules
+{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
 
+.mod
+{
+    width: 250px;
+    border-left: 15px solid #42B97C;
+    background-color: beige;
+    margin-bottom: 30px;
+    padding: 10px;
+}
+
+.mod .mod-title
+{
+    display: block;
+    font-size: 18px;
+    text-align: center;
+    color: green;
+}
+
+.addEvent {
+    display: block;
+    float: right;
+    margin: 15px;
+}
+
+
+/* ==================================================
+  Excursions
+================================================== */
+
+/*!* prepare wrapper element *!*/
+div.input-suffix {
+    display: inline-block;
+    position: relative;
+}
+
+/* position the unit to the right of the wrapper */
+div.input-suffix::after {
+    position: absolute;
+    top: 2px;
+    right: 1.8em;
+    transition: all .05s ease-in-out;
+}
+
+/* move unit more to the left on hover
+   for arrow buttons will appear to the right of number inputs */
+
+
+/* set the unit abbreviation for each unit class */
+.euro::after {
+    content: '€';
+}
+
+.excursion-title {
+    color: white!important;
+}
+
+.excursion-price {
+    display: inline;
+    float: right;
+    margin-right: 30px;
+}
 
 /* ==================================================
   Animation
