@@ -10,6 +10,7 @@ class ExcursionsModel extends AppModel
     private $title;
     private $price;
     private $description;
+    private $isActive;
 
     /**
      * Get the value of Id
@@ -90,6 +91,38 @@ class ExcursionsModel extends AppModel
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Get the value of isActive
+     *
+     * @return mixed
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIsActivetoString()
+    {
+        return ($this->isActive ? 'Oui' : 'Non');
+    }
+
+    /**
+     * Set the value of isActive
+     *
+     * @param mixed isActive
+     *
+     * @return self
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
     }
 
     public function add(): bool

@@ -5,6 +5,7 @@ namespace Agnes\Model;
 use Agnes\Util\DBConnection;
 use Agnes\Model\PictureModel;
 use Agnes\Model\UserModel;
+use Agnes\Util\TableName;
 
 class CommentModel extends AppModel
 {
@@ -13,6 +14,7 @@ class CommentModel extends AppModel
     private $id_picture;
     private $content;
     private $createdAt;
+    private $isActive;
 
     /**
      * Get the value of Id
@@ -134,6 +136,38 @@ class CommentModel extends AppModel
         return $this;
     }
 
+    /**
+     * Get the value of isActive
+     *
+     * @return mixed
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIsActivetoString()
+    {
+        return ($this->isActive ? 'Oui' : 'Non');
+    }
+
+    /**
+     * Set the value of isActive
+     *
+     * @param mixed isActive
+     *
+     * @return self
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
     public static function getAllByPictureId($id)
     {
         $db = DBConnection::getInstance();
@@ -158,6 +192,8 @@ class CommentModel extends AppModel
         if($query->execute()) {
             return $data = $query->fetchAll(\PDO::FETCH_CLASS, static::class);
         }
+
+        return false;
     }
 
     public static function getAllByPictureIdLimit($id_picture, $first_com, $commentPerPage)
@@ -187,15 +223,37 @@ class CommentModel extends AppModel
         $query->bindValue(':commentPerPage',(int) $commentPerPage, \PDO::PARAM_INT);
         if ($query->execute())
             return $query->fetchAll(\PDO::FETCH_CLASS, static::class);
+
+        return false;
     }
 
-    public function insert($data = '')
+    public function add()
     {
-        $data = [];
-        foreach(get_object_vars($this) as $key => $value)
-            $data[$key] = $value;
+        $db = DBConnection::getInstance();
+        $table = TableName::getTableName(get_called_class());
 
-        parent::insert($data);
+        $stmt = "INSERT INTO $table(
+                  `id_user`,
+                  `id_picture`,
+                  `content`,
+                  `isActive`
+                )VALUES(
+                  :id_user,
+                  :id_picture,
+                  :content,
+                  :isActive
+                )";
+
+        $query = $db->prepare($stmt);
+        $query->bindValue(':id_user', $this->getIdUser(), \PDO::PARAM_INT);
+        $query->bindValue(':id_picture', $this->getIdPicture(), \PDO::PARAM_INT);
+        $query->bindValue(':content', $this->getContent(), \PDO::PARAM_STR);
+        $query->bindValue(':isActive', $this->getisActive(), \PDO::PARAM_INT);
+
+        if ($query->execute())
+            return true;
+
+        return false;
     }
 
 }

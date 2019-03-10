@@ -15,6 +15,7 @@ class PictureModel extends AppModel
     private $description;
     private $width;
     private $height;
+    private $isActive;
 
 
     // public function __construct($id = null)
@@ -178,6 +179,38 @@ class PictureModel extends AppModel
         return $this;
     }
 
+    /**
+     * Get the value of isActive
+     *
+     * @return mixed
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIsActivetoString()
+    {
+        return ($this->isActive ? 'Oui' : 'Non');
+    }
+
+    /**
+     * Set the value of isActive
+     *
+     * @param mixed isActive
+     *
+     * @return self
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
     public function insert($data = '')
     {
         $data = [];
@@ -226,7 +259,8 @@ class PictureModel extends AppModel
                     p.extension,
                     p.description,
                     p.width,
-                    p.height
+                    p.height,
+                    p.isActive
                 FROM picture p";
 
         if (!empty(trim($order)))
@@ -248,6 +282,7 @@ class PictureModel extends AppModel
                     p.description,
                     p.width,
                     p.height,
+                    p.isActive,
 
                     c.name as category_name
                 FROM
@@ -284,7 +319,28 @@ class PictureModel extends AppModel
         return $data = $query->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
 
-    public static function findByCategory($id_category)
+    public static function findActiveWithCategory()
+    {
+        $db = DBConnection::getInstance();
+
+        $stmt = "SELECT
+                    p.id,
+                    p.filename,
+                    p.extension,
+                    p.description,
+
+                    c.name as category_name
+                FROM picture p
+                LEFT JOIN category c ON p.id_category = c.id
+                WHERE p.isActive = 1";
+
+
+        $query = $db->query($stmt);
+
+        return $data = $query->fetchAll(\PDO::FETCH_CLASS, static::class);
+    }
+
+    public static function findActiveByCategory($id_category)
     {
         $db = DBConnection::getInstance();
 
@@ -296,7 +352,8 @@ class PictureModel extends AppModel
                 FROM
                     picture p
                 WHERE
-                    p.id_category = :id_category";
+                    p.id_category = :id_category
+                    AND p.isActive = 1";
 
         $query = $db->prepare($stmt);
         $query->bindValue(':id_category', $id_category, \PDO::PARAM_INT);

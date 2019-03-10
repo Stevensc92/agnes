@@ -8,6 +8,18 @@ use Agnes\Util\TableName;
 
 class AppModel
 {
+    /**
+     * @var \PDO
+     */
+    protected $db;
+
+    public function __construct($param = null)
+    {
+        $this->db = DBConnection::getInstance();
+
+        return $this;
+    }
+
     public static function findAll($order = '')
     {
         $db = DBConnection::getInstance();
@@ -54,6 +66,11 @@ class AppModel
 
         $query = $db->prepare($stmt);
 
+        foreach ($data as $key => $value) {
+            var_dump(is_int($value));
+        }
+        die();
+
         foreach($data as $key => $value)
             $query->bindValue(":$key", $value, (is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR) );
 
@@ -77,6 +94,21 @@ class AppModel
 
         return true;
 
+    }
+
+    public static function switchStatut($id)
+    {
+        $db = DBConnection::getInstance();
+        $table = TableName::getTableName(get_called_class());
+
+        $stmt = "UPDATE $table SET isActive = NOT isActive WHERE id =  :id";
+        $query = $db->prepare($stmt);
+        $query->bindValue(':id', $id, \PDO::PARAM_INT);
+
+        if($query->execute() == 0)
+            return false;
+
+        return true;
     }
 
     // public function multiInsert($data)

@@ -21,7 +21,7 @@ class UserModel extends AppModel
     /**
      * Get the value of Id
      *
-     * @return mixed
+     * @return int
      */
     public function getId()
     {

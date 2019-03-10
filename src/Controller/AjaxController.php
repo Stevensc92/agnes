@@ -44,12 +44,15 @@ class AjaxController extends AppController
 
             $content = $_POST['com_content'];
 
+
+            $now = new \DateTime();
             $comment = new CommentModel();
             $comment->setIdUser($user)
             ->setContent($content)
             ->setIdPicture($picture)
-            ->setCreatedAt(date('Y-m-d H:i:s', time()))
-            ->insert();
+            ->setCreatedAt($now)
+            ->setIsActive(1)
+            ->add();
 
             if ($db->lastInsertId() > 0) {
                 $comments = CommentModel::getAllByPictureIdLimit($picture->getId(), 0, 5);

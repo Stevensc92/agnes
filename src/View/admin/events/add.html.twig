@@ -14,3 +14,13 @@
     </div>
 </div>
 {% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        var quill = new Quill('#description', {
+            modules: {
+                toolbar: '#toolbar'
+            },
+            theme: 'snow',
+        });
+    </script>{% endblock %}

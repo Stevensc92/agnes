@@ -31,7 +31,7 @@ class PictureController extends AppController
     }
 
     /**
-     * @Route('/picture/[a:category']', name="showCategory")
+     * @Route('/picture/[a:category]', name="showCategory")
      * @Method('GET')
      */
     public function showCategory(array $params)
@@ -42,7 +42,7 @@ class PictureController extends AppController
         $categoryName = $params['category'];
 
         $category = CategoryModel::findOneByName($categoryName);
-        $pictures = PictureModel::findByCategory($category->getId());
+        $pictures = PictureModel::findActiveByCategory($category->getId());
         echo $this->twig->render('category/show.html.twig', array(
             'pictures' => $pictures,
         ));

@@ -12,6 +12,7 @@
                     <td>#</td>
                     <td>Titre</td>
                     <td>Prix en €</td>
+                    <td>Actif</td>
                     <td>Action</td>
                 </tr>
                 </thead>
@@ -21,6 +22,7 @@
                         <td>{{ excursion.id }}</td>
                         <td>{{ excursion.name }}</td>
                         <td>{{ excursion.price }} €</td>
+                        <td>{{ excursion.isActiveToString }} <a href="{{ path('switchStatutEvent', {'id': 'toto'}) }}"><i class="fas fa-sync-alt"></i></a></td>
                         <td>
                             <a href="{{ path('deleteExcursion', {'id' : excursion.id}) }}" class="confirm"><i class="far fa-trash-alt"></i></a>
                             <a href="{{ path('editExcursion', {'id' : excursion.id}) }}"><i class="far fa-edit"></i></a>

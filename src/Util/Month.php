@@ -31,9 +31,10 @@ class Month
     public $year;
 
     /**
-     * Month construct
-     * @param int $month [Beetwen 1 and 12]
-     * @param int $year
+     * Month constructor.
+     * @param int|null $month
+     * @param int|null $year
+     * @throws \Exception
      */
     public function __construct(?int $month = null , ?int $year = null)
     {
@@ -58,7 +59,7 @@ class Month
 
     /**
      * Return the first day of month
-     * @return DateTime
+     * @return \DateTime
      */
     public function getFirstDay(): \DateTime {
         return new \DateTime("{$this->year}-{$this->month}-01");
@@ -99,7 +100,7 @@ class Month
 
     /**
      * Compare a day if is in the current month or in the next/prev month
-     * @param  DateTime $date
+     * @param  \DateTime $date
      * @return bool
      */
     public function withinMonths(\DateTime $date): bool {
@@ -107,8 +108,8 @@ class Month
     }
 
     /**
-     * Return the following month
      * @return Month
+     * @throws \Exception
      */
     public function nextMonth(): Month
     {
@@ -126,8 +127,8 @@ class Month
     }
 
     /**
-     * Return the previous month
      * @return Month
+     * @throws \Exception
      */
     public function previousMonth(): Month
     {

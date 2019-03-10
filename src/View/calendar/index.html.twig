@@ -119,13 +119,9 @@
 
                         var $date = currentYear+'-'+currentMonth+'-'+$currentDay;
 
-                        console.log($date);
                         $calendarContent.removeClass('span12').addClass('span8');
                         $reservation.removeClass('hidden');
                         $('input[type=hidden]').val($date);
-
-                        // console.log($cday);
-                        // console.log($month);
 
                         return false;
                     });

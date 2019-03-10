@@ -53,6 +53,7 @@ class App
         $this->router->map('GET',       '/admin/events',              'BackOfficeController#listEvents',      'listEvents');
         $this->router->map('GET|POST',  '/admin/events/update/[i:id]','BackOfficeController#editEvent',       'editEvent');
         $this->router->map('GET',       '/admin/events/delete/[i:id]','BackOfficeController#deleteEvent',     'deleteEvent');
+        $this->router->map('GET',      '/admin/events/switch/[i:id]','BackOfficeController#switchStatutEvent', 'switchStatutEvent');
         $this->router->map('GET|POST',  '/admin/events/add',          'BackOfficeController#addEvent',        'addEvent');
 
             /**

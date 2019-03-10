@@ -264,9 +264,10 @@ jQuery(function($){
     app.formSubmit();
     app.transformDiv();
 
-    // $('.input-append.date').datepicker({
-    //    clearBtn: true,
-    //    language: "fr",
-    //    todayHighlight: true
-    // });
+    if ($('body').find('#ckeditor').length > 0) {
+        CKEDITOR.replace('ckeditor', {
+           width: 1200,
+           height: 400
+        });
+    }
 });

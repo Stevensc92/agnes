@@ -169,6 +169,14 @@ class EventsModel extends AppModel
     }
 
     /**
+     * @return string
+     */
+    public function getIsActivetoString()
+    {
+        return ($this->isActive ? 'Oui' : 'Non');
+    }
+
+    /**
      * Set the value of isActive
      *
      * @param mixed isActive
@@ -224,7 +232,7 @@ class EventsModel extends AppModel
               FROM
                 events e
               WHERE
-                start BETWEEN '{$start->format('Y-m-d 00:00:00')}' AND '{$end->format('Y-m-d 23:59:59')}' AND isActive = 1";
+                (e.start BETWEEN '".$start->format('Y-m-d 00:00:00')."' AND '".$end->format('Y-m-d 23:59:59')."') AND e.isActive = 1";
 
       $query = $db->prepare($stmt);
       $query->bindValue(':startTime', $start->format('Y-m-d 00:00:00'));

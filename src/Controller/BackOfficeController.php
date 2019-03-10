@@ -388,4 +388,26 @@ class BackOfficeController extends AppController
 
         $this->router->redirectToRoute('listEvents');
     }
+
+    /**
+     * @Route("/admin/events/switch/[i:id]", name="switchStatutEvent")
+     * @Method("POST")
+     * @param $param
+     * @return bool
+     */
+    public function switchStatutEvent($param)
+    {
+        if (!$this->is_granted('ROLE_ADMIN')) {
+            $this->notFound();
+            return false;
+        }
+
+        if(EventsModel::switchStatut($param['id'])) {
+            $this->session->flash->setFlashMessage('L\'état de l\'évènement a bien été modifié.', 'success');
+        } else {
+            $this->session->flash->setFlashMessage('L\'état de l\'évènement n\'a pas été modifié.');
+        }
+
+        return $this->router->redirectToRoute('listEvents');
+    }
 }
